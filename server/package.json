@@ -1,0 +1,12 @@
+{
+  "name": "twidy",
+  "version": "1.0.0",
+  "description": "Social-Media App for learning purposes",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Ismoil Sharifov",
+  "license": "ISC"
+}
