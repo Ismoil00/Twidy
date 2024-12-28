@@ -7,6 +7,7 @@ import { corsOptions } from "./configs/cors";
 import { credentials } from "./middlewares/handleCredentials";
 import { errorHandler } from "./middlewares/handleErrors";
 import { logger } from "./middlewares/handleLogEvents";
+import { default as profileRouter } from "./routes/profile";
 
 const app = express();
 dotenv.config();
@@ -23,6 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 // ROUTES - not authentication & authorization:
 
 // ROUTES:
+app.use("/profile", profileRouter);
 
 // ERROR MIDDLEWARE:
 app.use(errorHandler);
