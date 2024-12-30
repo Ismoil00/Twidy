@@ -1,0 +1,1 @@
+export const USER_EXISTANCE_BY_USERNAME = "SELECT 1 FROM profile.users u WHERE u.username = $1";

@@ -8,6 +8,7 @@ import { credentials } from "./middlewares/handleCredentials";
 import { errorHandler } from "./middlewares/handleErrors";
 import { logger } from "./middlewares/handleLogEvents";
 import { default as profileRouter } from "./routes/profile";
+import { default as authRouter } from "./routes/auth";
 
 const app = express();
 dotenv.config();
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // ROUTES:
 app.use("/profile", profileRouter);
+app.use("/auth", authRouter);
 
 // ERROR MIDDLEWARE:
 app.use(errorHandler);
