@@ -9,6 +9,7 @@ import { errorHandler } from "./middlewares/handleErrors";
 import { logger } from "./middlewares/handleLogEvents";
 import { default as profileRouter } from "./routes/profile";
 import { default as authRouter } from "./routes/auth";
+import useragent from "express-useragent";
 
 const app = express();
 dotenv.config();
@@ -21,12 +22,15 @@ app.use(compression());
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(useragent.express()); // to get information about user device
+
+app.set("trust proxy", true); // it may be deleted later
 
 // ROUTES - not authentication & authorization:
+app.use("/auth", authRouter);
 
 // ROUTES:
 app.use("/profile", profileRouter);
-app.use("/auth", authRouter);
 
 // ERROR MIDDLEWARE:
 app.use(errorHandler);

@@ -32,7 +32,10 @@ export const query = async (text: string, params?: any[]): Promise<any> => {
 
   try {
     const result: QueryResult<any> = await client.query(text, params);
-    return result.rows;
+    // console.log("DB Result: ", result);
+
+    if (result.rowCount === 0) return null;
+    else return result.rows[0]["response"];
   } catch (error) {
     console.log("Databse query ERROR: ", error);
     throw error;

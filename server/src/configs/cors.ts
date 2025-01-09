@@ -1,4 +1,6 @@
 import { CorsOptions } from "./types";
+import dotenv from "dotenv";
+dotenv.config();
 
 const allowedOrigins: string[] = JSON.parse(process.env.ALLOWED_ORIGINS);
 
