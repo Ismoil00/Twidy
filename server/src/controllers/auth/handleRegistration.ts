@@ -2,16 +2,10 @@ import { Request, Response } from "express";
 import { isString } from "../../helpers/validations";
 import { query } from "../../configs/db";
 import bcrypt from "bcrypt";
-import { USER_EXISTANCE_BY_USERNAME } from "../../helpers/queries";
-
-/* 
-  - when user creates an account, he/she must verify the account via email/phone number;
-  * if we add phone number, then there must be several things regarding the phone number:
-    - country-number auto detection;
-    - phone number validation;
-    - phone number should be unique;
-    - phone number should be verified via OTP or SMS;
-*/
+import {
+  USER_EXISTANCE_BY_USERNAME,
+  INSERT_USER_ON_REGISTRATION,
+} from "../../helpers/queries";
 
 const handleRegistration = async (req: Request, res: Response) => {
   try {
@@ -47,7 +41,7 @@ const handleRegistration = async (req: Request, res: Response) => {
     };
 
     //saving new user to database
-    const userSaved = await query("SELECT profile.insert_user_on_registration($1)", [
+    const userSaved = await query(INSERT_USER_ON_REGISTRATION, [
       JSON.stringify(user),
     ]);
     if (userSaved.status !== 200) throw new Error(userSaved);
