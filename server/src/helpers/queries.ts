@@ -4,3 +4,5 @@ export const GET_USER_BY_USERNAME: string =
   "SELECT row_to_json(u) as response FROM profile.users u WHERE u.username = $1";
 export const INSERT_USER_ON_REGISTRATION: string =
   "SELECT profile.insert_user_on_registration($1) as response";
+export const INSERT_NEW_SESSION: string =
+  "SELECT auth.insert_new_session($1) as response";

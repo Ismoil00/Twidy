@@ -24,7 +24,9 @@ const handleRegistration = async (req: Request, res: Response) => {
     }
 
     // username existance check
-    const userExists = await query(USER_EXISTANCE_BY_USERNAME, [username]);
+    const userExists = await query(USER_EXISTANCE_BY_USERNAME, [
+      username,
+    ]);
     if (userExists) {
       res.status(409).json({ error: "Username already exists" });
       return;
@@ -32,7 +34,9 @@ const handleRegistration = async (req: Request, res: Response) => {
 
     // password hashing
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = {
+    const user: {
+      [index: string]: string;
+    } = {
       username,
       password: hashedPassword,
       firstname,
@@ -41,13 +45,13 @@ const handleRegistration = async (req: Request, res: Response) => {
     };
 
     //saving new user to database
-    const userSaved = await query(INSERT_USER_ON_REGISTRATION, [
+    const newUserSave = await query(INSERT_USER_ON_REGISTRATION, [
       JSON.stringify(user),
     ]);
-    if (userSaved.status !== 200) throw new Error(userSaved);
+    if (newUserSave.status !== 200) throw new Error(newUserSave);
 
     // response to the front
-    res.status(200).json(userSaved);
+    res.status(200).json(newUserSave);
   } catch (error) {
     console.error("ERROR in Registration: ", error);
     res.status(500).json({ error: `Internal Server Error: ${error}` });

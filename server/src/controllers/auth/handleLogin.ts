@@ -6,10 +6,12 @@ import { query } from "../../configs/db";
 import { NewSession } from "../types";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { INSERT_NEW_SESSION } from "../../helpers/queries";
+import { cookieParams } from "../../helpers/constants";
 
 const handleLogin = async (req: Request, res: Response) => {
   const { username, password } = req.body;
-  
+
   // validation
   if (!isString(username) || !isString(password)) {
     res.status(400).json({
@@ -29,15 +31,15 @@ const handleLogin = async (req: Request, res: Response) => {
 
   // password match check
   const match = await bcrypt.compare(password, user.password);
-  // if (!match) {
-  //   res
-  //     .status(401)
-  //     .json({ message: "Invalid Credentials. Incorrect Password" });
-  //   return;
-  // }
+  if (!match) {
+    res
+      .status(401)
+      .json({ message: "Invalid Credentials. Incorrect Password" });
+    return;
+  }
 
   // refresh token reuse detection + clearing it
-  const cookies = req.cookies;
+  // const cookies = req.cookies;
   // if (cookies.refreshToken) {
   //   if (cookies.refreshToken !== user.refreshToken) {
   //     console.error("Refresh-Token REUSE DETECTION: ", cookies.refreshToken);
@@ -62,39 +64,15 @@ const handleLogin = async (req: Request, res: Response) => {
   //   });
   // }
 
-  // generating new refresh token + new access token
+  // generating new refresh token
   const forRefreshToken = userRandomData(user);
   const newRefreshToken = jwt.sign(
     { [forRefreshToken["key"]]: forRefreshToken["value"] },
     process.env.REFRESH_TOKEN_SECRET_KEY!,
     { expiresIn: "1d" }
   );
-  const forAccessToken = userRandomData(user);
-  const newAccessToken = jwt.sign(
-    { [forAccessToken["key"]]: forAccessToken["value"] },
-    process.env.ACCESS_TOKEN_SECRET_KEY!,
-    { expiresIn: "15m" }
-  );
 
   // saving new device session
-  /* ---------------------------------------- */
-  // const userDeviceInfo = {
-  //   browser: req.useragent.browser,
-  //   version: req.useragent.version,
-  //   os: req.useragent.os,
-  //   platform: req.useragent.platform,
-  //   origin: req.useragent.source,
-  // };
-  // const ipAddress: string | string[] =
-  //   req.headers["cf-connecting-ip"] ||
-  //   req.headers["x-forwarded-for"] ||
-  //   req.headers["x-real-ip"] ||
-  //   req.socket.remoteAddress ||
-  //   req.ip;
-  // console.log("IP: ", ipAddress);
-  // console.log("Device Info:", userDeviceInfo);
-  /* ---------------------------------------- */
-
   const newSession: NewSession = {
     userId: user.userId,
     refreshToken: newRefreshToken,
@@ -113,13 +91,33 @@ const handleLogin = async (req: Request, res: Response) => {
     },
   };
 
-  console.log("newAccessToken: ", newAccessToken);
-  console.log("New Session: ", newSession);
+  try {
+    const newSessionSave = await query(INSERT_NEW_SESSION, [
+      JSON.stringify(newSession),
+    ]);
+    if (newSessionSave.status !== 200) throw new Error(newSessionSave);
 
-  res.send("success");
-  return;
+    // generating new refresh token
+    const forAccessToken = userRandomData(user);
+    const newAccessToken = jwt.sign(
+      {
+        [forAccessToken["key"]]: forAccessToken["value"],
+        sessionId: newSessionSave["sessionId"],
+      },
+      process.env.ACCESS_TOKEN_SECRET_KEY!,
+      { expiresIn: "15m" }
+    );
 
-  // setting tokens and responding to the user
+    // user response
+    res.cookie("refreshToken", newRefreshToken, cookieParams);
+    res.setHeader("Authorization", "Bearer " + newAccessToken);
+    res
+      .status(200)
+      .json({ userId: user["userId"], sessionId: newSessionSave["sessionId"] });
+  } catch (error) {
+    console.error("ERROR in Login: ", error);
+    res.status(500).json({ error: `Internal Server Error: ${error}` });
+  }
 };
 
 export default handleLogin;

@@ -1,5 +1,10 @@
 type UUID = string;
 
-type User4Params = ["userId", "firstname", "lastname", "description"];
+export type User4Params = ["userId", "firstname", "lastname", "description"];
 
-export { User4Params };
+export interface CookieParams {
+  httpOnly: true;
+  secure: true;
+  sameSite: "strict";
+  maxAge?: number;
+}
