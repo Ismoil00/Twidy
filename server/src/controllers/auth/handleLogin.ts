@@ -6,8 +6,12 @@ import { query } from "../../configs/db";
 import { NewSession } from "../types";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { INSERT_NEW_SESSION } from "../../helpers/queries";
-import { cookieParams } from "../../helpers/constants";
+import {
+  INSERT_NEW_SESSION,
+  GET_ALL_USER_REFRESHTOKENS,
+  SAVE_REUSED_REFRESHTOKEN,
+} from "../../helpers/queries";
+import { cookieParams, cookieParamsWithoutAge } from "../../helpers/constants";
 
 const handleLogin = async (req: Request, res: Response) => {
   const { username, password } = req.body;
@@ -39,30 +43,33 @@ const handleLogin = async (req: Request, res: Response) => {
   }
 
   // refresh token reuse detection + clearing it
-  // const cookies = req.cookies;
-  // if (cookies.refreshToken) {
-  //   if (cookies.refreshToken !== user.refreshToken) {
-  //     console.error("Refresh-Token REUSE DETECTION: ", cookies.refreshToken);
+  const cookies = req.cookies;
+  if (cookies.refreshToken) {
+    try {
+      const data = await query(GET_ALL_USER_REFRESHTOKENS, [user["userId"]]);
+      if (data.status !== 200) throw new Error(data);
 
-  //     res.clearCookie("refreshToken", {
-  //       httpOnly: true,
-  //       sameSite: "none",
-  //       secure: true,
-  //     });
+      if (!data["refreshTokens"].includes(cookies.refreshToken)) {
+        console.error("Refresh-Token REUSE DETECTION");
 
-  //     // updateUserData({ ...user, refreshToken: null });
+        await query(SAVE_REUSED_REFRESHTOKEN, [
+          user["userId"],
+          cookies.refreshToken,
+        ]);
+        res.clearCookie("refreshToken", cookieParamsWithoutAge);
+        res.status(403).json({
+          message: "Session compromised. Please log in again",
+        });
+        return;
+      }
 
-  //     return res.status(403).json({
-  //       message: "Session compromised. Please log in again.",
-  //     });
-  //   }
-
-  //   res.clearCookie("refreshToken", {
-  //     httpOnly: true,
-  //     sameSite: "none",
-  //     secure: true,
-  //   });
-  // }
+      res.clearCookie("refreshToken", cookieParamsWithoutAge);
+    } catch (error) {
+      console.error("ERROR in Login: ", error);
+      res.status(500).json({ error: `Internal Server Error: ${error}` });
+      return;
+    }
+  }
 
   // generating new refresh token
   const forRefreshToken = userRandomData(user);

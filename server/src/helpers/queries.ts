@@ -6,3 +6,7 @@ export const INSERT_USER_ON_REGISTRATION: string =
   "SELECT profile.insert_user_on_registration($1) as response";
 export const INSERT_NEW_SESSION: string =
   "SELECT auth.insert_new_session($1) as response";
+export const GET_ALL_USER_REFRESHTOKENS: string =
+  "SELECT auth.get_refreshTokens_via_userId($1) as response";
+export const SAVE_REUSED_REFRESHTOKEN: string =
+  "SELECT auth.save_used_refreshToken($1, $1) as response";
