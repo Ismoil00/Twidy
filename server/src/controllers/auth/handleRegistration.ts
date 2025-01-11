@@ -4,20 +4,28 @@ import { query } from "../../configs/db";
 import bcrypt from "bcrypt";
 import { USER_EXISTANCE_BY_USERNAME } from "../../helpers/queries";
 
+/* 
+  - when user creates an account, he/she must verify the account via email/phone number;
+  * if we add phone number, then there must be several things regarding the phone number:
+    - country-number auto detection;
+    - phone number validation;
+    - phone number should be unique;
+    - phone number should be verified via OTP or SMS;
+*/
+
 const handleRegistration = async (req: Request, res: Response) => {
   try {
-    const { username, password, firstname, lastname } = req.body;
+    const { username, password, firstname, lastname, email } = req.body;
 
     // validtaion
     if (
       !isString(username) ||
       !isString(password) ||
       !isString(firstname) ||
-      !isString(lastname)
+      !isString(lastname) ||
+      (isString(email) && !email.split("").includes("@"))
     ) {
-      res
-        .status(400)
-        .json({ error: "All fields are required for Registration" });
+      res.status(400).json({ error: "Check the authenticity of the fields" });
       return;
     }
 
@@ -35,10 +43,11 @@ const handleRegistration = async (req: Request, res: Response) => {
       password: hashedPassword,
       firstname,
       lastname,
+      email,
     };
 
     //saving new user to database
-    const userSaved = await query("SELECT profile.upsert_user($1)", [
+    const userSaved = await query("SELECT profile.insert_user_on_registration($1)", [
       JSON.stringify(user),
     ]);
     if (userSaved.status !== 200) throw new Error(userSaved);

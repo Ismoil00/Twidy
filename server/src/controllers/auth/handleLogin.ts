@@ -12,7 +12,7 @@ const handleLogin = async (req: Request, res: Response) => {
     - when new session created, we inform the user in other sessions [if exist];
     - when the current session deleted/user logs out, we delete the session from DB;
     - when another session is deleted from the current session, we not only delete but redirect the user to the login page on the device where the session was deleted;
-
+    
     * Session Deactivation: Simple Delition, WebSocket, or Polling;
   */
 
