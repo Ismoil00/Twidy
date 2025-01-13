@@ -44,3 +44,9 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+<!-- DEFAULT PARAMS -->
+- font-weight: 600, 700
+- font-size: 2.25rem, 1.125rem, 1rem
+- font-family: Nunito
+- radius: 3.125rem, 1.25rem, 1rem, 0.75rem
