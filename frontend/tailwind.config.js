@@ -22,6 +22,15 @@ module.exports = {
         "16px": "1rem",
         "12px": "0.75rem",
       },
+      fontWeight: {
+        600: "600",
+        700: "700",
+      },
+      fontSize: {
+        "36px": "2.25rem",
+        "18px": "1.125rem",
+        "16px": "1rem",
+      },
     },
   },
   plugins: [],
