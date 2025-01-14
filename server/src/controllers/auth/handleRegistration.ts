@@ -6,27 +6,22 @@ import {
   USER_EXISTANCE_BY_USERNAME,
   INSERT_USER_ON_REGISTRATION,
 } from "../../helpers/queries";
+import { ajv } from "../../helpers/validations";
 
 const handleRegistration = async (req: Request, res: Response) => {
   try {
-    const { username, password, firstname, lastname, email } = req.body;
-
-    // validtaion
-    if (
-      !isString(username) ||
-      !isString(password) ||
-      !isString(firstname) ||
-      !isString(lastname) ||
-      (isString(email) && !email.split("").includes("@"))
-    ) {
-      res.status(400).json({ error: "Check the authenticity of the fields" });
+    //validation
+    const validate = ajv.getSchema("registration");
+    const valid = validate(req.body);
+    if (!valid) {
+      res.status(400).json({ errors: validate.errors });
       return;
     }
 
+    const { username, password, firstname, lastname, email } = req.body;
+
     // username existance check
-    const userExists = await query(USER_EXISTANCE_BY_USERNAME, [
-      username,
-    ]);
+    const userExists = await query(USER_EXISTANCE_BY_USERNAME, [username]);
     if (userExists) {
       res.status(409).json({ error: "Username already exists" });
       return;

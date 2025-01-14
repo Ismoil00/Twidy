@@ -12,17 +12,18 @@ import {
   SAVE_REUSED_REFRESHTOKEN,
 } from "../../helpers/queries";
 import { cookieParams, cookieParamsWithoutAge } from "../../helpers/constants";
+import { ajv } from "../../helpers/validations";
 
 const handleLogin = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-
-  // validation
-  if (!isString(username) || !isString(password)) {
-    res.status(400).json({
-      message: "Username and Password are required",
-    });
+  //validation
+  const validate = ajv.getSchema("login");
+  const valid = validate(req.body);
+  if (!valid) {
+    res.status(400).json({ errors: validate.errors });
     return;
   }
+
+  const { username, password } = req.body;
 
   // user existance check
   const user = await query(GET_USER_BY_USERNAME, [username]);

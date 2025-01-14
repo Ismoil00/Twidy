@@ -1,3 +1,12 @@
+import { registrationSchema } from "./validation-schemas/registration";
+import { loginSchema } from "./validation-schemas/login";
+import Ajv from "ajv";
+import addErrors from "ajv-errors";
+import addFormats from "ajv-formats";
+export const ajv = new Ajv({ allErrors: true });
+addErrors(ajv); // to enable custom error messages
+addFormats(ajv); // to add formats for ajv
+
 export function isNumeric(value: any): boolean {
   return /^-?\d+(\.\d+)?$/.test(value);
 }
@@ -7,3 +16,6 @@ export function isString(value: any): boolean {
 
   return false;
 }
+
+ajv.addSchema(registrationSchema, "registration");
+ajv.addSchema(loginSchema, "login");
