@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Button from "../../components/button";
 import Input from "../../components/input";
 import { Link } from "react-router-dom";
+import { ajv } from "../../helpers/validation";
+import { AnyValidateFunction } from "ajv/dist/types";
+import { toast } from "react-toastify";
 
 interface UserInitialData {
   username: string;
@@ -27,12 +30,23 @@ export default function Registration(): JSX.Element {
   };
 
   const onSubmit = async () => {
-    console.log("clicked");
+    const validate = ajv.getSchema(
+      "registration"
+    ) as AnyValidateFunction<unknown>;
+    const valid: any = await validate(user);
 
-    if (Object.values(user).some((val: string | undefined) => val === "")) {
-      alert("Please fill all the required fields");
+    toast("Wow so easy !");
+
+    console.log(valid);
+    if (!valid) {
+      console.log(validate.errors?.[0]);
       return;
     }
+
+    // if (Object.values(user).some((val: string | undefined) => val === "")) {
+    //   alert("Please fill all the required fields");
+    //   return;
+    // }
   };
 
   return (

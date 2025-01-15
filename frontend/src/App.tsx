@@ -2,6 +2,7 @@
 import { Routes, Route } from "react-router-dom";
 import Registration from "./pages/auth/registration";
 import Login from "./pages/auth/login";
+import { ToastContainer } from "react-toastify";
 // import Button from "./components/button";
 // import Input from "./components/input";
 
@@ -15,6 +16,7 @@ function App() {
         <Route path="/registration" element={<Registration />} />
         <Route path="*" element={<div>Page not found</div>} />
       </Routes>
+      <ToastContainer />
       {/* <Button text={"TEST"} onClick={() => console.log("clicked")} />
       <Input
         type="text"

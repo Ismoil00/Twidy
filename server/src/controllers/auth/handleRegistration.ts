@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { isString } from "../../helpers/validations";
 import { query } from "../../configs/db";
 import bcrypt from "bcrypt";
 import {
