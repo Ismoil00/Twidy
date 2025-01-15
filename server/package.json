@@ -1,5 +1,5 @@
 {
-  "name": "twidy",
+  "name": "twidy_server",
   "version": "1.0.0",
   "description": "Social-Media App for learning purposes",
   "main": "server.js",

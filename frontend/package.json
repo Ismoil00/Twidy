@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "twidy_frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -10,6 +10,11 @@
     "@types/node": "^16.18.123",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "ajv": "^8.17.1",
+    "ajv-errors": "^3.0.0",
+    "ajv-formats": "^3.0.1",
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.1",
@@ -43,7 +48,6 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "ajv": "^7.2.4",
     "tailwindcss": "^3.4.17"
   }
 }
