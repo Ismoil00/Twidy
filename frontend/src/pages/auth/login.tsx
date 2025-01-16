@@ -60,7 +60,7 @@ export default function Login(): JSX.Element {
       <div className="mt-10">
         <Button text="Log in" onClick={onSubmit} type="submit" />
       </div>
-      <div className="mt-4 px-5 w-full flex justify-between">
+      <div className="mt-4 px-5 w-full flex justify-between flex-col items-center sm:flex-row">
         <p className="text-brand_text_primary font-600">
           Don't have an account yet?
         </p>

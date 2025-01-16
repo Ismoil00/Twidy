@@ -4,7 +4,7 @@ import Input from "../../components/input";
 import { Link } from "react-router-dom";
 import { ajv } from "../../helpers/validation";
 import { AnyValidateFunction } from "ajv/dist/types";
-import { toast } from "react-toastify";
+import Notify from "../../components/toast";
 
 interface UserInitialData {
   username: string;
@@ -33,13 +33,13 @@ export default function Registration(): JSX.Element {
     const validate = ajv.getSchema(
       "registration"
     ) as AnyValidateFunction<unknown>;
-    const valid: any = await validate(user);
+    const valid = await validate(user);
 
-    toast("Wow so easy !");
+    Notify("custom toast", "error");
 
-    console.log(valid);
+    // console.log(valid);
     if (!valid) {
-      console.log(validate.errors?.[0]);
+      // console.log(validate.errors?.[0]);
       return;
     }
 
@@ -110,7 +110,7 @@ export default function Registration(): JSX.Element {
       <div className="mt-10">
         <Button text="Register" onClick={onSubmit} type="submit" />
       </div>
-      <div className="mt-4 px-5 w-full flex justify-between">
+      <div className="mt-4 px-5 w-full flex flex-col items-center sm:flex-row justify-between">
         <p className="text-brand_text_primary font-600">
           Already have an account?
         </p>
