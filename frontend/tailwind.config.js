@@ -31,6 +31,9 @@ module.exports = {
         "18px": "1.125rem",
         "16px": "1rem",
       },
+      boxShadow: {
+        error_red: "0 0px 10px rgba(255, 0, 0, 0.5)",
+      },
     },
   },
   plugins: [],

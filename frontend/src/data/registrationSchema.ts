@@ -3,14 +3,14 @@ export const registrationSchema = {
   properties: {
     username: {
       type: "string",
-      pattern: "^(?!\\d)[a-zA-Z0-9]{6,100}$",
-      not: {
-        pattern: "^\\d+$",
-      },
+      minLength: 6,
+      maxLength: 100,
+      pattern: "^(?!\\d)(?!\\d+$)[^\\s]+$",
       errorMessage: {
+        minLength: "Username must be at least 6 characters long.",
+        maxLength: "Username must not exceed 100 characters.",
         pattern:
-          "Username must be 6-100 characters long, cannot start with a number, and must not contain spaces.",
-        not: "Username cannot consist solely of numbers.",
+          "Username cannot start with a number, consist solely of numbers, or contain spaces.",
       },
     },
     password: {
@@ -35,7 +35,7 @@ export const registrationSchema = {
       errorMessage: {
         minLength: "Firstname is required.",
         pattern:
-          "Firstname must contain at least one letter and must not be empty or contain only spaces.",
+          "Firstname must contain at least one letter and must not contain only spaces.",
       },
     },
     lastname: {
@@ -45,7 +45,7 @@ export const registrationSchema = {
       errorMessage: {
         minLength: "Lastname is required.",
         pattern:
-          "Lastname must contain at least one letter and must not be empty or contain only spaces.",
+          "Lastname must contain at least one letter and must not contain only spaces.",
       },
     },
     email: {

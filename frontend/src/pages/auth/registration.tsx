@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { ajv } from "../../helpers/validation";
 import { AnyValidateFunction } from "ajv/dist/types";
 import Notify from "../../components/toast";
+import { useNavigate } from "react-router-dom";
 
 interface UserInitialData {
   username: string;
@@ -22,6 +23,8 @@ export default function Registration(): JSX.Element {
     lastname: "",
     email: "",
   });
+  const [inputError, setInputError] = useState<string | undefined>(undefined);
+  const navigate = useNavigate();
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.name;
@@ -30,23 +33,51 @@ export default function Registration(): JSX.Element {
   };
 
   const onSubmit = async () => {
+    /* VALIDATION */
     const validate = ajv.getSchema(
       "registration"
     ) as AnyValidateFunction<unknown>;
     const valid = await validate(user);
 
-    Notify("custom toast", "error");
-
-    // console.log(valid);
     if (!valid) {
-      // console.log(validate.errors?.[0]);
+      const field: string | undefined =
+        validate.errors?.[0]["instancePath"].split("/")[1];
+      const msg: string | undefined = validate.errors?.[0]["message"];
+
+      setInputError(field);
+      Notify(msg, "error");
       return;
     }
 
-    // if (Object.values(user).some((val: string | undefined) => val === "")) {
-    //   alert("Please fill all the required fields");
-    //   return;
-    // }
+    /* SERVER REQUEST */
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/auth/registration`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(user),
+        }
+      );
+      const data = await response.json();
+
+      if (data.status !== 200) throw new Error(data.msg);
+
+      /* SUCCESS -> NAVIGATE TO LOGIN */
+      Notify(data.msg, "success");
+      setTimeout(() => {
+        Notify("Now, Please Login", "success");
+        navigate("/login");
+      }, 2000);
+    } catch (error: any) {
+      Notify(error.message || `REGISTRATION ERROR`, "error");
+      console.error("REGISTRATION ERROR: ", error);
+    } finally {
+      setInputError(undefined);
+    }
   };
 
   return (
@@ -65,6 +96,7 @@ export default function Registration(): JSX.Element {
           value={user.username}
           label="Username"
           placeholder="username2025"
+          error={inputError === "username" ? true : false}
         />
       </div>
       <div className="mt-5">
@@ -75,6 +107,7 @@ export default function Registration(): JSX.Element {
           value={user.password}
           label="Password"
           placeholder="adf44!@$@#"
+          error={inputError === "password" ? true : false}
         />
       </div>
       <div className="mt-5">
@@ -85,6 +118,7 @@ export default function Registration(): JSX.Element {
           value={user.firstname}
           label="Firstname"
           placeholder="Test"
+          error={inputError === "firstname" ? true : false}
         />
       </div>
       <div className="mt-5">
@@ -95,6 +129,7 @@ export default function Registration(): JSX.Element {
           value={user.lastname}
           label="Lastname"
           placeholder="Test"
+          error={inputError === "lastname" ? true : false}
         />
       </div>
       <div className="mt-5">
@@ -105,6 +140,7 @@ export default function Registration(): JSX.Element {
           value={user.email}
           label="Email"
           placeholder="test-test@gmail.com"
+          error={inputError === "email" ? true : false}
         />
       </div>
       <div className="mt-10">

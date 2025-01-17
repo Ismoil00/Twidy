@@ -12,7 +12,11 @@ import { TiTick } from "react-icons/ti";
   brand_text_primary: "#4E3F6F",
   brand_text_secondary: "#8C8CB6",
 */
-const Notify = (message: string, type: string, theme: string = "light") => {
+const Notify = (
+  message: string | undefined = "No Error Message",
+  type: string,
+  theme: string = "light"
+) => {
   const iconColor = {
     scale: "2.4",
     paddingLeft: "2px",
@@ -30,7 +34,7 @@ const Notify = (message: string, type: string, theme: string = "light") => {
     autoClose: 5000,
     hideProgressBar: false,
     closeOnClick: false,
-    pauseOnHover: true,
+    pauseOnHover: false,
     draggable: true,
     progress: undefined,
     theme: theme,

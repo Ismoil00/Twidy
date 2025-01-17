@@ -13,7 +13,7 @@ const handleRegistration = async (req: Request, res: Response) => {
     const validate = ajv.getSchema("registration");
     const valid = validate(req.body);
     if (!valid) {
-      res.status(400).json({ errors: validate.errors });
+      res.status(400).json({ msg: validate.errors });
       return;
     }
 
@@ -22,7 +22,7 @@ const handleRegistration = async (req: Request, res: Response) => {
     // username existance check
     const userExists = await query(USER_EXISTANCE_BY_USERNAME, [username]);
     if (userExists) {
-      res.status(409).json({ error: "Username already exists" });
+      res.status(409).json({ msg: "Username already exists" });
       return;
     }
 
@@ -48,7 +48,7 @@ const handleRegistration = async (req: Request, res: Response) => {
     res.status(200).json(newUserSave);
   } catch (error) {
     console.error("ERROR in Registration: ", error);
-    res.status(500).json({ error: `Internal Server Error: ${error}` });
+    res.status(500).json({ msg: `Internal Server Error: ${error}` });
   }
 };
 
