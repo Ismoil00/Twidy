@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import Button from "../../components/button";
 import Input from "../../components/input";
 import { Link } from "react-router-dom";
+import { ajv } from "../../helpers/validation";
+import { AnyValidateFunction } from "ajv/dist/types";
+import Notify from "../../components/toast";
+import { useNavigate } from "react-router-dom";
 
 interface UserLoginData {
   username: string;
@@ -13,6 +17,8 @@ export default function Login(): JSX.Element {
     username: "",
     password: "",
   });
+  const [inputError, setInputError] = useState<string | undefined>(undefined);
+  const navigate = useNavigate();
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.name;
@@ -21,11 +27,54 @@ export default function Login(): JSX.Element {
   };
 
   const onSubmit = async () => {
-    console.log("clicked");
+    /* VALIDATION */
+    const validate = ajv.getSchema("login") as AnyValidateFunction<unknown>;
+    const valid = await validate(user);
 
-    if (Object.values(user).some((val: string | undefined) => val === "")) {
-      alert("Please fill all the required fields");
+    if (!valid) {
+      const field: string | undefined =
+        validate.errors?.[0]["instancePath"].split("/")[1];
+      const msg: string | undefined = validate.errors?.[0]["message"];
+
+      setInputError(field);
+      Notify(msg, "error");
       return;
+    }
+
+    /* SERVER REQUEST */
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(user),
+          credentials: "include",
+        }
+      );
+      const data = await response.json();
+
+      /* REDIRECTION IN CASE OF TOKEN-ERRORS */
+      if (data.redirect) {
+        Notify(data.msg, "error");
+        navigate(data.redirect);
+        return;
+      }
+      if (response.status !== 200) throw new Error(data.msg);
+
+      /* SUCCESS -> NAVIGATE TO HOME-PAGE */
+      Notify(data.msg, "success");
+      const token = response.headers.get("Authorization");
+      localStorage.setItem("session", JSON.stringify({ ...data, token }));
+      navigate("/");
+    } catch (error: any) {
+      Notify(error.message || `LOGIN ERROR`, "error");
+      console.error("LOGIN ERROR: ", error);
+    } finally {
+      if (inputError) setInputError(undefined);
     }
   };
 
@@ -45,6 +94,7 @@ export default function Login(): JSX.Element {
           value={user.username}
           label="Username"
           placeholder="username2025"
+          error={inputError === "username" ? true : false}
         />
       </div>
       <div className="mt-5">
@@ -55,6 +105,7 @@ export default function Login(): JSX.Element {
           value={user.password}
           label="Password"
           placeholder="adf44!@$@#"
+          error={inputError === "password" ? true : false}
         />
       </div>
       <div className="mt-10">

@@ -1,6 +1,5 @@
 import { GET_USER_BY_USERNAME } from "../../helpers/queries";
 import { userRandomData } from "../../helpers/randomHelpers";
-import { isString } from "../../helpers/validations";
 import { Request, Response } from "express";
 import { query } from "../../configs/db";
 import { NewSession } from "../types";
@@ -19,7 +18,7 @@ const handleLogin = async (req: Request, res: Response) => {
   const validate = ajv.getSchema("login");
   const valid = validate(req.body);
   if (!valid) {
-    res.status(400).json({ errors: validate.errors });
+    res.status(400).json({ msg: validate.errors });
     return;
   }
 
@@ -28,21 +27,16 @@ const handleLogin = async (req: Request, res: Response) => {
   // user existance check
   const user = await query(GET_USER_BY_USERNAME, [username]);
   if (!user) {
-    res
-      .status(401)
-      .send({ message: "Invalid Credentials. User does not exist" });
+    res.status(401).send({ msg: "Invalid Credentials. User does not exist" });
     return;
   }
 
   // password match check
   const match = await bcrypt.compare(password, user.password);
   if (!match) {
-    res
-      .status(401)
-      .json({ message: "Invalid Credentials. Incorrect Password" });
+    res.status(401).json({ msg: "Invalid Credentials. Incorrect Password" });
     return;
   }
-
   // refresh token reuse detection + clearing it
   const cookies = req.cookies;
   if (cookies.refreshToken) {
@@ -50,7 +44,7 @@ const handleLogin = async (req: Request, res: Response) => {
       const data = await query(GET_ALL_USER_REFRESHTOKENS, [user["userId"]]);
       if (data.status !== 200) throw new Error(data);
 
-      if (!data["refreshTokens"].includes(cookies.refreshToken)) {
+      if (!data["refreshTokens"]?.includes(cookies.refreshToken)) {
         console.error("Refresh-Token REUSE DETECTION");
 
         await query(SAVE_REUSED_REFRESHTOKEN, [
@@ -59,7 +53,8 @@ const handleLogin = async (req: Request, res: Response) => {
         ]);
         res.clearCookie("refreshToken", cookieParamsWithoutAge);
         res.status(403).json({
-          message: "Session compromised. Please log in again",
+          msg: "Session compromised. Please log in again",
+          redirect: "/login",
         });
         return;
       }
@@ -67,7 +62,10 @@ const handleLogin = async (req: Request, res: Response) => {
       res.clearCookie("refreshToken", cookieParamsWithoutAge);
     } catch (error) {
       console.error("ERROR in Login: ", error);
-      res.status(500).json({ error: `Internal Server Error: ${error}` });
+      res.status(500).json({
+        msg: `Session compromised. Please log in again: ${error}`,
+        redirect: "/login",
+      });
       return;
     }
   }
@@ -119,12 +117,13 @@ const handleLogin = async (req: Request, res: Response) => {
     // user response
     res.cookie("refreshToken", newRefreshToken, cookieParams);
     res.setHeader("Authorization", "Bearer " + newAccessToken);
-    res
-      .status(200)
-      .json({ userId: user["userId"], sessionId: newSessionSave["sessionId"] });
+    res.status(200).json({
+      userId: user["userId"],
+      sessionId: newSessionSave["sessionId"],
+    });
   } catch (error) {
     console.error("ERROR in Login: ", error);
-    res.status(500).json({ error: `Internal Server Error: ${error}` });
+    res.status(500).json({ msg: `Internal Server Error: ${error}` });
   }
 };
 

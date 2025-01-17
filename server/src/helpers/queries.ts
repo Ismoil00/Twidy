@@ -9,4 +9,4 @@ export const INSERT_NEW_SESSION: string =
 export const GET_ALL_USER_REFRESHTOKENS: string =
   "SELECT auth.get_refreshTokens_via_userId($1) as response";
 export const SAVE_REUSED_REFRESHTOKEN: string =
-  "SELECT auth.save_used_refreshToken($1, $1) as response";
+  "SELECT auth.save_used_refreshToken($1, $2) as response";

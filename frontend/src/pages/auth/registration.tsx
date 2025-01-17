@@ -64,7 +64,7 @@ export default function Registration(): JSX.Element {
       );
       const data = await response.json();
 
-      if (data.status !== 200) throw new Error(data.msg);
+      if (response.status !== 200) throw new Error(data.msg);
 
       /* SUCCESS -> NAVIGATE TO LOGIN */
       Notify(data.msg, "success");
@@ -76,7 +76,7 @@ export default function Registration(): JSX.Element {
       Notify(error.message || `REGISTRATION ERROR`, "error");
       console.error("REGISTRATION ERROR: ", error);
     } finally {
-      setInputError(undefined);
+      if (inputError) setInputError(undefined);
     }
   };
 
