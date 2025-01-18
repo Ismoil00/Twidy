@@ -10,6 +10,7 @@ import { logger } from "./middlewares/handleLogEvents";
 import { default as profileRouter } from "./routes/profile";
 import { default as authRouter } from "./routes/auth";
 import useragent from "express-useragent";
+import verifyAccessToken from "./middlewares/verifyAccessToken";
 
 const app = express();
 dotenv.config();
@@ -30,6 +31,7 @@ app.set("trust proxy", true); // it may be deleted later
 app.use("/auth", authRouter);
 
 // ROUTES:
+app.use(verifyAccessToken);
 app.use("/profile", profileRouter);
 
 // ERROR MIDDLEWARE:
