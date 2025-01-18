@@ -1,4 +1,3 @@
-import { GET_USER_BY_USERNAME } from "../../helpers/queries";
 import { userRandomData } from "../../helpers/randomHelpers";
 import { Request, Response } from "express";
 import { query } from "../../configs/db";
@@ -9,6 +8,8 @@ import {
   INSERT_NEW_SESSION,
   GET_ALL_USER_REFRESHTOKENS,
   SAVE_REUSED_REFRESHTOKEN,
+  DEELTE_SESSION_VIA_REFRESHTOKEN,
+  GET_USER_BY_USERNAME,
 } from "../../helpers/queries";
 import { cookieParams, cookieParamsWithoutAge } from "../../helpers/constants";
 import { ajv } from "../../helpers/validations";
@@ -42,7 +43,7 @@ const handleLogin = async (req: Request, res: Response) => {
   if (cookies.refreshToken) {
     try {
       const data = await query(GET_ALL_USER_REFRESHTOKENS, [user["userId"]]);
-      if (data.status !== 200) throw new Error(data);
+      if (data.status !== 200) throw data;
 
       if (!data["refreshTokens"]?.includes(cookies.refreshToken)) {
         console.error("Refresh-Token REUSE DETECTION");
@@ -59,6 +60,10 @@ const handleLogin = async (req: Request, res: Response) => {
         return;
       }
 
+      const sessionDeleted = await query(DEELTE_SESSION_VIA_REFRESHTOKEN, [
+        cookies.refreshToken,
+      ]);
+      if (sessionDeleted.status !== 200) throw sessionDeleted;
       res.clearCookie("refreshToken", cookieParamsWithoutAge);
     } catch (error) {
       console.error("ERROR in Login: ", error);
@@ -120,6 +125,7 @@ const handleLogin = async (req: Request, res: Response) => {
     res.status(200).json({
       userId: user["userId"],
       sessionId: newSessionSave["sessionId"],
+      fullname: `${user["firstname"]} ${user["lastname"]}`,
     });
   } catch (error) {
     console.error("ERROR in Login: ", error);

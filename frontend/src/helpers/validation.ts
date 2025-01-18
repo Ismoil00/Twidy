@@ -1,5 +1,5 @@
-import { loginSchema } from "../data/loginSchema";
-import { registrationSchema } from "../data/registrationSchema";
+import { loginSchema } from "./schemas/loginSchema";
+import { registrationSchema } from "./schemas/registrationSchema";
 import Ajv from "ajv";
 import addErrors from "ajv-errors";
 import addFormats from "ajv-formats";

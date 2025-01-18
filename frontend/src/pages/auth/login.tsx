@@ -66,12 +66,12 @@ export default function Login(): JSX.Element {
       if (response.status !== 200) throw new Error(data.msg);
 
       /* SUCCESS -> NAVIGATE TO HOME-PAGE */
-      Notify(data.msg, "success");
+      Notify(`You are welcom ${data["fullname"]}`, "success");
       const token = response.headers.get("Authorization");
       localStorage.setItem("session", JSON.stringify({ ...data, token }));
       navigate("/");
     } catch (error: any) {
-      Notify(error.message || `LOGIN ERROR`, "error");
+      Notify(error.msg || error.message || `LOGIN ERROR`, "error");
       console.error("LOGIN ERROR: ", error);
     } finally {
       if (inputError) setInputError(undefined);

@@ -73,7 +73,7 @@ export default function Registration(): JSX.Element {
         navigate("/login");
       }, 2000);
     } catch (error: any) {
-      Notify(error.message || `REGISTRATION ERROR`, "error");
+      Notify(error.msg || error.message || `REGISTRATION ERROR`, "error");
       console.error("REGISTRATION ERROR: ", error);
     } finally {
       if (inputError) setInputError(undefined);

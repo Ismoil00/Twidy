@@ -1,5 +1,10 @@
-import React from "react";
+import Logout from "../../components/logout";
 
 export default function HomePage() {
-  return <div>HomePage</div>;
+  return (
+    <div>
+      <Logout />
+      HomePage
+    </div>
+  );
 }
