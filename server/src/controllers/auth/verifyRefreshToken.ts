@@ -39,25 +39,35 @@ const verifyRefreshToken = async (req: Request, res: Response) => {
     }
 
     // token varification
+    let refreshTokenExpired = false;
     jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET_KEY,
       async (err, decoded) => {
         if (err) {
+          refreshTokenExpired = true;
           console.error("RefreshToken has expired");
 
-          await query(DEELTE_SESSION_VIA_REFRESHTOKEN, [refreshToken]);
+          const response = await query(DEELTE_SESSION_VIA_REFRESHTOKEN, [
+            refreshToken,
+          ]);
+
+          if (response.status !== 200) {
+            console.error("ERROR while deleting session: ", response);
+            res.status(500).json({ msg: `Internal Server Error: ${response}` });
+            return;
+          }
 
           res.status(403).json({
             msg: "Refresh-Token expired. Please log in again",
             redirect: "/login",
           });
-          return;
         }
-
-        console.log("RECHING THIS POINT 1ST");
       }
     );
+
+    // no procced if
+    if (refreshTokenExpired) return;
 
     // generating new refresh + access tokens
     const newAccessToken = jwt.sign(
@@ -81,7 +91,7 @@ const verifyRefreshToken = async (req: Request, res: Response) => {
     if (updateToken["status"] !== 200) throw updateToken;
 
     res.cookie("refreshToken", newRefreshToken, cookieParams);
-    res.setHeader("Authorization", "Bearer " + newAccessToken);
+    res.setHeader("authorization", "Bearer " + newAccessToken);
     res.status(200).json({
       userId: session["userId"],
       sessionId: session["sessionId"],

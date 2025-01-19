@@ -14,7 +14,6 @@ export default function Logout() {
           credentials: "include",
         }
       );
-      console.log("LOGOUT RESPONSE: ", response);
       if (response.status !== 204) throw response;
 
       localStorage.removeItem("session");

@@ -16,3 +16,5 @@ export const GET_SESSION_VIA_REFRESHTOKEN: string =
   "SELECT auth.get_session_via_refreshToken($1) as response";
 export const UPDATE_SESSION_REFRESHTOKEN: string =
   "SELECT auth.update_session_refreshToken($1, $2) as response";
+export const GET_ALL_SESSIONS: string =
+  "SELECT auth.get_all_sessions() as response";

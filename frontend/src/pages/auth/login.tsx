@@ -67,7 +67,7 @@ export default function Login(): JSX.Element {
 
       /* SUCCESS -> NAVIGATE TO HOME-PAGE */
       Notify(`You are welcom ${data["fullname"]}`, "success");
-      const token = response.headers.get("Authorization");
+      const token = response.headers.get("authorization");
       localStorage.setItem("session", JSON.stringify({ ...data, token }));
       navigate("/");
     } catch (error: any) {

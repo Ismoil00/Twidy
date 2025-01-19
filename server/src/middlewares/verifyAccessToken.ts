@@ -6,7 +6,7 @@ const verifyAccessToken = async (
   res: Response,
   next: NextFunction
 ) => {
-  const accessToken = req.headers["Authorization"] as string;
+  const accessToken = req.headers["authorization"] as string;
 
   if (!accessToken || !accessToken?.startsWith("Bearer ")) {
     res.status(403).json({
@@ -25,7 +25,8 @@ const verifyAccessToken = async (
     }
 
     if (error.name === "TokenExpiredError") {
-      res.status(401).json({ msg: "Access-Token has expired" });
+      res.status(401).statusMessage = "TokenExpiredError";
+      res.json({ msg: "Access-Token has expired" });
       return;
     }
 
