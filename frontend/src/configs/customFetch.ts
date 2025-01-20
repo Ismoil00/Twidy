@@ -1,3 +1,5 @@
+import Notify from "../components/toast";
+
 interface Session {
   userId: string;
   sessionId: string;
@@ -12,7 +14,6 @@ export default async function genServerReq(
   headers?: { [index: string]: string }
 ): Promise<any> {
   try {
-    // session check
     const session: string | null = localStorage.getItem("session");
 
     if (!session) throw new Error("Session not found");
@@ -26,25 +27,26 @@ export default async function genServerReq(
         headers: {
           Accept: "application/json",
           authorization: parsedSession["token"],
-          credentials: "include",
           ...(method !== "GET" && { "Content-Type": "application/json" }),
           ...(headers || {}),
         },
+        credentials: "include",
       }
     ); // 403, 401, 200, ...;
 
-    console.log("RESPONSE: " + onlyOne, response);
-
-    if (response.status === 200)
-      return response; // if success -> return response
+    if (response.status === 200) return response;
     else if (
       response.status === 401 &&
-      response.statusText === "TokenExpiredError"
-      && onlyOne === 1
+      response.statusText === "TokenExpiredError" &&
+      onlyOne === 1
     ) {
-      // access token has expired -> refresh token verfication
       return await getNewAccessToken(parsedSession, endpoint, method, headers);
-    } else throw response; // return other types of errors
+    } else if (
+      response.status === 403 &&
+      response.statusText === "RedirectToLoginPage"
+    ) {
+      redirectUserToLogin(response);
+    } else throw response;
   } catch (error) {
     return error;
   }
@@ -65,7 +67,6 @@ async function getNewAccessToken(
         credentials: "include",
       }
     ); // 403, 500, 200
-    console.log("REFRESH TOKEN RESPONSE: ", response);
     if (response.status !== 200) throw response;
 
     const newAcessToken = response.headers.get("Authorization");
@@ -75,7 +76,21 @@ async function getNewAccessToken(
     );
 
     return await genServerReq(endpoint, method, headers);
-  } catch (error) {
+  } catch (error: any) {
+    if (error.status === 403 && error.statusText === "RedirectToLoginPage") {
+      redirectUserToLogin(error);
+      return;
+    }
+
     return error;
   }
+}
+
+async function redirectUserToLogin(res: Response) {
+  const data = await res.json();
+  Notify(data.msg, "error");
+  localStorage.removeItem("session");
+  setTimeout(() => {
+    window.location.href = "/login";
+  }, 5000);
 }

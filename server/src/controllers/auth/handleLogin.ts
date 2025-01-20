@@ -80,8 +80,7 @@ const handleLogin = async (req: Request, res: Response) => {
   const newRefreshToken = jwt.sign(
     { [forRefreshToken["key"]]: forRefreshToken["value"] },
     process.env.REFRESH_TOKEN_SECRET_KEY!,
-    // { expiresIn: "1d" }
-    { expiresIn: "10s" }
+    { expiresIn: "1d" }
   );
 
   // saving new device session
@@ -117,8 +116,7 @@ const handleLogin = async (req: Request, res: Response) => {
         sessionId: newSessionSave["sessionId"],
       },
       process.env.ACCESS_TOKEN_SECRET_KEY!,
-      // { expiresIn: "15m" }
-      { expiresIn: "10s" }
+      { expiresIn: "15m" }
     );
 
     // user response

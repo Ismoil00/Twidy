@@ -14,9 +14,8 @@ const verifyRefreshToken = async (req: Request, res: Response) => {
     const refreshToken: string = req.cookies["refreshToken"];
 
     if (!refreshToken) {
-      res
-        .status(403)
-        .json({ msg: "Refresh-Token is missing", redirect: "/login" });
+      res.status(403).statusMessage = "RedirectToLoginPage";
+      res.json({ msg: "Refresh-Token is missing", redirect: "/login" });
       return;
     }
 
@@ -31,7 +30,8 @@ const verifyRefreshToken = async (req: Request, res: Response) => {
         refreshToken,
       ]);
 
-      res.status(403).json({
+      res.status(403).statusMessage = "RedirectToLoginPage";
+      res.json({
         msg: "User Refresh-Token is hacked. Please log in again",
         redirect: "/login",
       });
@@ -58,7 +58,8 @@ const verifyRefreshToken = async (req: Request, res: Response) => {
             return;
           }
 
-          res.status(403).json({
+          res.status(403).statusMessage = "RedirectToLoginPage";
+          res.json({
             msg: "Refresh-Token expired. Please log in again",
             redirect: "/login",
           });
