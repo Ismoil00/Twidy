@@ -63,17 +63,16 @@ export default function Registration(): JSX.Element {
         }
       );
       const data = await response.json();
-
-      if (response.status !== 200) throw new Error(data.msg);
+      if (response.status !== 200) throw data;
 
       /* SUCCESS -> NAVIGATE TO LOGIN */
-      Notify(data.msg, "success");
+      Notify(data.message, "success");
       setTimeout(() => {
         Notify("Now, Please Login", "success");
         navigate("/login");
       }, 2000);
     } catch (error: any) {
-      Notify(error.msg || error.message || `REGISTRATION ERROR`, "error");
+      Notify(error.message || `REGISTRATION ERROR`, "error");
       console.error("REGISTRATION ERROR: ", error);
     } finally {
       if (inputError) setInputError(undefined);

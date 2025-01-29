@@ -14,13 +14,14 @@ export default function Logout() {
           credentials: "include",
         }
       );
-      if (response.status !== 204) throw response;
+      const data = await response.json();
+      if (response.status !== 204) throw data;
 
       localStorage.removeItem("session");
       navigate("/login");
       Notify("You logged out", "info");
     } catch (error: any) {
-      Notify(error.msg || error.message || `LOGOUT ERROR`, "error");
+      Notify(error.message || `LOGOUT ERROR`, "error");
       console.error("LOGOUT ERROR: ", error);
     }
   };

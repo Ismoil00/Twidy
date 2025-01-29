@@ -16,7 +16,7 @@ const handleLogout = async (req: Request, res: Response) => {
     res.sendStatus(204);
   } catch (error) {
     console.error("ERROR in Logout: ", error);
-    res.status(500).json({ msg: `Internal Server Error: ${error}` });
+    res.status(500).json({ message: `Internal Server Error: ${error}` });
   }
 };
 

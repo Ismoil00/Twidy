@@ -59,11 +59,11 @@ export default function Login(): JSX.Element {
 
       /* REDIRECTION IN CASE OF TOKEN-ERRORS */
       if (data.redirect) {
-        Notify(data.msg, "error");
+        Notify(data.message, "error");
         navigate(data.redirect);
         return;
       }
-      if (response.status !== 200) throw new Error(data.msg);
+      if (response.status !== 200) throw data;
 
       /* SUCCESS -> NAVIGATE TO HOME-PAGE */
       Notify(`You are welcom ${data["fullname"]}`, "success");
@@ -71,7 +71,7 @@ export default function Login(): JSX.Element {
       localStorage.setItem("session", JSON.stringify({ ...data, token }));
       navigate("/");
     } catch (error: any) {
-      Notify(error.msg || error.message || `LOGIN ERROR`, "error");
+      Notify(error.message || `LOGIN ERROR`, "error");
       console.error("LOGIN ERROR: ", error);
     } finally {
       if (inputError) setInputError(undefined);
