@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Button from "../../components/button";
 import Input from "../../components/input";
 import { Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import { ajv } from "../../helpers/validation";
 import { AnyValidateFunction } from "ajv/dist/types";
 import Notify from "../../components/toast";
 import { useNavigate } from "react-router-dom";
+import { sessionContext } from "../../helpers/sessionContext";
 
 interface UserLoginData {
   username: string;
@@ -19,6 +20,7 @@ export default function Login(): JSX.Element {
   });
   const [inputError, setInputError] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
+  const { connectToSessionSocket, sessionSocket } = useContext(sessionContext);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.name;
@@ -65,10 +67,17 @@ export default function Login(): JSX.Element {
       }
       if (response.status !== 200) throw data;
 
+      /* 
+      userId
+      sessionId
+      fullname
+      */
+      /* SOCKET CONNECTION */
+
       /* SUCCESS -> NAVIGATE TO HOME-PAGE */
-      Notify(`You are welcom ${data["fullname"]}`, "success");
       const token = response.headers.get("authorization");
       localStorage.setItem("session", JSON.stringify({ ...data, token }));
+      Notify(`You are welcom ${data["fullname"]}`, "success");
       navigate("/");
     } catch (error: any) {
       Notify(error.message || `LOGIN ERROR`, "error");

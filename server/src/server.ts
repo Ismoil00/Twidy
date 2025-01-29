@@ -11,8 +11,7 @@ import { default as profileRouter } from "./routes/profile";
 import { default as authRouter } from "./routes/auth";
 import useragent from "express-useragent";
 import verifyAccessToken from "./middlewares/verifyAccessToken";
-
-const app = express();
+import { app, server } from "./serverSocket";
 dotenv.config();
 
 // MIDDLEWARES:
@@ -24,7 +23,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(useragent.express()); // to get information about user device
-
 app.set("trust proxy", true); // it may be deleted later
 
 // ROUTES - not authentication & authorization:
@@ -37,6 +35,6 @@ app.use("/profile", profileRouter);
 // ERROR MIDDLEWARE:
 app.use(errorHandler);
 
-app.listen(process.env.PORT, () =>
+server.listen(process.env.PORT, () =>
   console.log("listening on port " + process.env.PORT)
 );

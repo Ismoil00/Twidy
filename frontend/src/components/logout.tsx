@@ -14,8 +14,7 @@ export default function Logout() {
           credentials: "include",
         }
       );
-      const data = await response.json();
-      if (response.status !== 204) throw data;
+      if (response.status !== 204) throw await response.json();
 
       localStorage.removeItem("session");
       navigate("/login");

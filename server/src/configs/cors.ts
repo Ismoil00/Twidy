@@ -13,8 +13,8 @@ export const corsOptions: CorsOptions = {
       callback(new Error("Not allowed by CORS"), false);
     }
   },
-  optionsSuccessStatus: 200,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  preflightContinue: false,
   credentials: true,
+  optionsSuccessStatus: 200,
+  preflightContinue: false,
 };
