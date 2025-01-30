@@ -1,20 +1,7 @@
 import { Socket } from "socket.io";
 
-// const activeSessions = {
-//   userId1: {
-//     sessionId1: "socket1",
-//     sessionId2: "socket2",
-//     sessionId3: "socket2",
-//   },
-//   userId2: {
-//     sessionId1: "socket1",
-//     sessionId2: "socket2",
-//     sessionId3: "socket2",
-//   },
-// };
-
 class ActiveSocketSessions {
-  activeSocketSessions: {
+  private activeSocketSessions: {
     [userId: string]: {
       [sessionId: string]: Socket;
     };
@@ -47,31 +34,52 @@ class ActiveSocketSessions {
 const activeSessions = new ActiveSocketSessions();
 
 interface SessionProps {
-  userId: "";
-  sessionId: "";
+  userId: string;
+  sessionId: string;
 }
 
-export const socketConnection = async (socket: Socket) => {
+const handleSessionAddEvent = (socket: Socket) => {
+  return (value: SessionProps, callback: (params: any) => void) => {
+    if (!socket) {
+      callback({
+        status: 500,
+        message: "Invalid Socket. Socket is missing",
+      });
+      return;
+    }
+
+    activeSessions.addSession(value.userId, value.sessionId, socket);
+    callback({ status: 200, message: "Session added successfully" });
+  };
+};
+
+const handleSessionRemoveEvent = (socket: Socket) => {
+  return (value: SessionProps, callback: (params: any) => void) => {
+    if (!socket) {
+      callback({
+        status: 500,
+        message: "Invalid Socket. Socket is missing",
+      });
+      return;
+    }
+
+    activeSessions.removeSession(value.userId, value.sessionId);
+    callback({ status: 200, message: "Session removed successfully" });
+  };
+};
+
+export const sessionSocketConnection = async (socket: Socket) => {
   // console.log(`new socket connected: ${socket.id}`);
 
-  socket.on(
-    "session:add",
-    (value: SessionProps, callback: (params: any) => void) => {
-      console.log("received socket message", value);
+  socket.on("session:add", handleSessionAddEvent(socket));
 
-      if (!socket) {
-        callback({ status: 500, message: "Invalid Socket" });
-        return;
-      }
-
-      activeSessions.addSession(value.userId, value.sessionId, socket);
-      callback({ status: 200, message: "Session added successfully" });
-    }
-  );
+  socket.on("session:remove", handleSessionRemoveEvent(socket));
 };
 
 /* 
-  1. connect to socket;
-  2. broadcast to others userId session of the new log-in;
-  3. clean cookie + front-storeage and redirect on session deletion|logout;
+  + connect to socket;
+  + clean cookie + front-storeage and redirect on session deletion|logout;
+  - broadcast to others userId session of the new log-in;
+  - get the list of user's sessions;
+  - redirect a session when it is deleted from another one;
 */

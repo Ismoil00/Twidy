@@ -43,8 +43,8 @@ export default function Login(): JSX.Element {
       return;
     }
 
-    /* SERVER REQUEST */
     try {
+      /* SERVER REQUEST */
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/auth/login`,
         {
@@ -59,20 +59,25 @@ export default function Login(): JSX.Element {
       );
       const data = await response.json();
 
-      /* REDIRECTION IN CASE OF TOKEN-ERRORS */
-      if (data.redirect) {
-        Notify(data.message, "error");
-        navigate(data.redirect);
-        return;
-      }
-      if (response.status !== 200) throw data;
+      /* SESSION SOCKET CONNECTION */
+      connectToSessionSocket();
+      const socketResponse = await sessionSocket?.emitWithAck("session:add", {
+        userId: data["userId"],
+        sessionId: data["sessionId"],
+      });
 
-      /* 
-      userId
-      sessionId
-      fullname
-      */
-      /* SOCKET CONNECTION */
+      /* ERROR HANDLE + REDIRECTION */
+      if (response.status !== 200 || socketResponse.status !== 200) {
+        sessionSocket?.disconnect();
+
+        if (data.redirect) {
+          Notify(data.message, "error");
+          navigate(data.redirect);
+          return;
+        }
+
+        throw response.status !== 200 ? data : socketResponse;
+      }
 
       /* SUCCESS -> NAVIGATE TO HOME-PAGE */
       const token = response.headers.get("authorization");

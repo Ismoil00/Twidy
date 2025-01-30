@@ -2,7 +2,7 @@ import express from "express";
 import http from "http";
 import { corsOptions } from "./configs/cors";
 import { Server } from "socket.io";
-import { socketConnection } from "./routes/authSocket";
+import { sessionSocketConnection } from "./routes/authSocket";
 
 const app = express();
 const server = http.createServer(app);
@@ -14,6 +14,6 @@ const io = new Server(server, {
   },
 });
 
-io.of("/socket/session").on("connection", socketConnection);
+io.of("/socket/session").on("connection", sessionSocketConnection);
 
 export { app, server, io };

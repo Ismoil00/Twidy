@@ -7,18 +7,18 @@ interface ProtectedRoutesProps {
 
 interface SessionContextProps {
   sessionSocket: Socket | null;
-  connectToSessionSocket: () => Promise<void>;
+  connectToSessionSocket: () => void;
 }
 
 export const sessionContext = createContext<SessionContextProps>({
   sessionSocket: null,
-  connectToSessionSocket: async () => {},
+  connectToSessionSocket: () => {},
 });
 
 export const SessionContextProvider = ({ children }: ProtectedRoutesProps) => {
   const [sessionSocket, setSessionSocket] = useState<null | Socket>(null);
 
-  const connectToSessionSocket = async () => {
+  const connectToSessionSocket = () => {
     const socket = io(`${process.env.REACT_APP_SERVER_URL}/socket/session`, {
       withCredentials: true,
     });
