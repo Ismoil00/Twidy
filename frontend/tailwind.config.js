@@ -34,6 +34,20 @@ module.exports = {
       boxShadow: {
         error_red: "0 0px 10px rgba(255, 0, 0, 0.5)",
       },
+      keyframes: {
+        moveLeftKeyPoints_01: {
+          "0%": { width: "0" },
+          "100%": { width: "100px" },
+        },
+        moveLeftKeyPoints_02: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-100px)" },
+        },
+      },
+      animation: {
+        moveLeft_01: "moveLeftKeyPoints_01 0.3s ease-out forwards",
+        moveLeft_02: "moveLeftKeyPoints_02 0.3s ease-out forwards",
+      },
     },
   },
   plugins: [],

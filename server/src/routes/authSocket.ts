@@ -79,7 +79,7 @@ export const sessionSocketConnection = async (socket: Socket) => {
 /* 
   + connect to socket;
   + clean cookie + front-storeage and redirect on session deletion|logout;
-  - broadcast to others userId session of the new log-in;
+  - broadcast to other userId sessions of the new log-in;
   - get the list of user's sessions;
   - redirect a session when it is deleted from another one;
 */
