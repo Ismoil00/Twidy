@@ -58,28 +58,27 @@ export default function Login(): JSX.Element {
         }
       );
       const data = await response.json();
+      /* HTTP ERROR HANDLE + REDIRECTION */
+      if (response.status === 403 && data.redirect) {
+        Notify(data.message, "error");
+        navigate(data.redirect);
+        return;
+      } else if (response.status !== 200) throw data;
 
       /* SESSION SOCKET CONNECTION */
       const socket = await connectToSessionSocket();
       let socketResponse;
-      if (socket instanceof Socket) {
+      if (socket instanceof Socket && socket.connected) {
         socketResponse = await socket.emitWithAck("session:add", {
           userId: data["userId"],
           sessionId: data["sessionId"],
         });
-      } else throw socket;
-
-      /* ERROR HANDLE + REDIRECTION */
-      if (response.status !== 200 || socketResponse.status !== 200) {
+      }
+      /* SOCKET ERRORS HANDLER */
+      if (!(socket instanceof Socket) || !socket.connected) throw socket;
+      else if (socketResponse.status !== 200) {
         socket.disconnect();
-
-        if (data.redirect) {
-          Notify(data.message, "error");
-          navigate(data.redirect);
-          return;
-        }
-
-        throw response.status !== 200 ? data : socketResponse;
+        throw socketResponse;
       }
 
       /* SUCCESS -> NAVIGATE TO HOME-PAGE */
@@ -88,7 +87,7 @@ export default function Login(): JSX.Element {
       Notify(`You are welcom ${data["fullname"]}`, "success");
       navigate("/");
     } catch (error: any) {
-      Notify(error.message || `LOGIN ERROR`, "error");
+      Notify(error?.message || `LOGIN ERROR`, "error");
       console.error("LOGIN ERROR: ", error);
     } finally {
       if (inputError) setInputError(undefined);
