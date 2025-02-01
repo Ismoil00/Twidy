@@ -38,7 +38,6 @@ export default function Registration(): JSX.Element {
       "registration"
     ) as AnyValidateFunction<unknown>;
     const valid = await validate(user);
-
     if (!valid) {
       const field: string | undefined =
         validate.errors?.[0]["instancePath"].split("/")[1];

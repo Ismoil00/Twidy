@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { FaTrashAlt } from "react-icons/fa";
+import { sessionContext } from "../helpers/sessionContext";
 
 const temp = [
   {
@@ -25,9 +26,37 @@ const temp = [
   },
 ];
 
+interface localStorageSession {
+  userId: string;
+  sessionId: string;
+  token: string;
+  fullName: string;
+}
+
 export default function Sessions(): JSX.Element {
   const [clicked, setClicked] = useState<string>("");
-  const [sessions, setSessions] = useState(null);
+  const [userSessions, setUserSessions] = useState(null);
+  const { sessionSocket } = useContext(sessionContext);
+
+  useEffect(() => {
+    const fetchUserSessions = () => {
+      const data: localStorageSession = JSON.parse(
+        localStorage.getItem("session") as string
+      );
+      sessionSocket.emit("session:userAllSessions", data["userId"]);
+
+      sessionSocket.on("session:userAllSessions", (response: any) => {
+        if (response.status !== 200) {
+          console.error("SOCKET ERROR in fetching user sessions: ", response);
+          return;
+        }
+        console.log("SESSIONS: ", response);
+        // setUserSessions(sessions);
+      });
+    };
+
+    fetchUserSessions();
+  }, []);
 
   const deleteSession = async (id: string) => {
     console.log("delete session", id);

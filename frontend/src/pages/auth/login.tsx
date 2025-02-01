@@ -7,6 +7,7 @@ import { AnyValidateFunction } from "ajv/dist/types";
 import Notify from "../../components/toast";
 import { useNavigate } from "react-router-dom";
 import { sessionContext } from "../../helpers/sessionContext";
+import { Socket } from "socket.io-client";
 
 interface UserLoginData {
   username: string;
@@ -20,7 +21,7 @@ export default function Login(): JSX.Element {
   });
   const [inputError, setInputError] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
-  const { connectToSessionSocket, sessionSocket } = useContext(sessionContext);
+  const { connectToSessionSocket } = useContext(sessionContext);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.name;
@@ -32,7 +33,6 @@ export default function Login(): JSX.Element {
     /* VALIDATION */
     const validate = ajv.getSchema("login") as AnyValidateFunction<unknown>;
     const valid = await validate(user);
-
     if (!valid) {
       const field: string | undefined =
         validate.errors?.[0]["instancePath"].split("/")[1];
@@ -60,15 +60,18 @@ export default function Login(): JSX.Element {
       const data = await response.json();
 
       /* SESSION SOCKET CONNECTION */
-      connectToSessionSocket();
-      const socketResponse = await sessionSocket?.emitWithAck("session:add", {
-        userId: data["userId"],
-        sessionId: data["sessionId"],
-      });
+      const socket = await connectToSessionSocket();
+      let socketResponse;
+      if (socket instanceof Socket) {
+        socketResponse = await socket.emitWithAck("session:add", {
+          userId: data["userId"],
+          sessionId: data["sessionId"],
+        });
+      } else throw socket;
 
       /* ERROR HANDLE + REDIRECTION */
       if (response.status !== 200 || socketResponse.status !== 200) {
-        sessionSocket?.disconnect();
+        socket.disconnect();
 
         if (data.redirect) {
           Notify(data.message, "error");

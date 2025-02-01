@@ -1,4 +1,6 @@
 import { Socket } from "socket.io";
+import { query } from "../configs/db";
+import { GET_ALL_USER_SESSIONS } from "../helpers/queries";
 
 class ActiveSocketSessions {
   private activeSocketSessions: {
@@ -27,8 +29,19 @@ class ActiveSocketSessions {
     }
   }
 
-  getUserSessions(userId: string) {
-    return this.activeSocketSessions[userId] || {};
+  async fetchUserAllSessions(userId: string) {
+    let userSessions: any;
+    try {
+      userSessions = await query(GET_ALL_USER_SESSIONS, [userId]);
+      if (userSessions.status !== 200) throw new Error(userSessions);
+    } catch (error) {
+      console.error("SOCKET ERROR in fetching user sessions: ", error);
+    }
+
+    const sockets = this.activeSocketSessions[userId] || {};
+    for (let [sessionId, socket] of Object.entries(sockets)) {
+      socket.emit("session:userAllSessions", userSessions);
+    }
   }
 }
 const activeSessions = new ActiveSocketSessions();
@@ -65,15 +78,28 @@ const handleSessionRemoveEvent = (socket: Socket) => {
 
     activeSessions.removeSession(value.userId, value.sessionId);
     callback({ status: 200, message: "Session removed successfully" });
+    socket.disconnect();
   };
 };
 
 export const sessionSocketConnection = async (socket: Socket) => {
-  // console.log(`new socket connected: ${socket.id}`);
+  console.log(`new socket connected: ${socket.id}`);
 
   socket.on("session:add", handleSessionAddEvent(socket));
 
   socket.on("session:remove", handleSessionRemoveEvent(socket));
+
+  socket.on("session:userAllSessions", (userId: string) => {
+    console.log("userId: ", userId);
+    // activeSessions.fetchUserAllSessions(userId);
+  });
+
+  socket.on("disconnect", (reason) => {
+    console.log(
+      `Socket Client-Side ${socket.id} disconnected. Reason:`,
+      reason
+    );
+  });
 };
 
 /* 

@@ -4,6 +4,13 @@ import Notify from "./toast";
 import { useContext } from "react";
 import { sessionContext } from "../helpers/sessionContext";
 
+interface localStorageSession {
+  userId: string;
+  sessionId: string;
+  token: string;
+  fullName: string;
+}
+
 export default function Logout() {
   const navigate = useNavigate();
   const { sessionSocket } = useContext(sessionContext);
@@ -20,8 +27,10 @@ export default function Logout() {
       );
 
       /* WE REMOVE SESSION SOCKET TOO */
-      const data = JSON.parse(localStorage.getItem("session") as string);
-      const socketResponse = await sessionSocket?.emitWithAck(
+      const data: localStorageSession = JSON.parse(
+        localStorage.getItem("session") as string
+      );
+      const socketResponse = await sessionSocket.emitWithAck(
         "session:remove",
         {
           userId: data["userId"],
@@ -31,7 +40,6 @@ export default function Logout() {
 
       /* WE HANDLE ERRORS */
       if (response.status !== 204 || socketResponse.status !== 200) {
-        sessionSocket?.disconnect();
         throw response.status !== 204 ? await response.json() : socketResponse;
       }
 
@@ -41,6 +49,8 @@ export default function Logout() {
     } catch (error: any) {
       Notify(error.message || `LOGOUT ERROR`, "error");
       console.error("LOGOUT ERROR: ", error);
+    } finally {
+      sessionSocket.disconnect();
     }
   };
 
