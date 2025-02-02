@@ -66,20 +66,20 @@ export default function Login(): JSX.Element {
       } else if (response.status !== 200) throw data;
 
       /* SESSION SOCKET CONNECTION */
-      const socket = await connectToSessionSocket();
-      let socketResponse;
-      if (socket instanceof Socket && socket.connected) {
-        socketResponse = await socket.emitWithAck("session:add", {
-          userId: data["userId"],
-          sessionId: data["sessionId"],
-        });
-      }
-      /* SOCKET ERRORS HANDLER */
-      if (!(socket instanceof Socket) || !socket.connected) throw socket;
-      else if (socketResponse.status !== 200) {
-        socket.disconnect();
-        throw socketResponse;
-      }
+      // const socket = await connectToSessionSocket();
+      // let socketResponse;
+      // if (socket instanceof Socket && socket.connected) {
+      //   socketResponse = await socket.emitWithAck("session:add", {
+      //     userId: data["userId"],
+      //     sessionId: data["sessionId"],
+      //   });
+      // }
+      // /* SOCKET ERRORS HANDLER */
+      // if (!(socket instanceof Socket) || !socket.connected) throw socket;
+      // else if (socketResponse.status !== 200) {
+      //   socket.disconnect();
+      //   throw socketResponse;
+      // }
 
       /* SUCCESS -> NAVIGATE TO HOME-PAGE */
       const token = response.headers.get("authorization");

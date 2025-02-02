@@ -171,12 +171,22 @@ export const sessionSocketConnection = async (socket: Socket) => {
 };
 
 /* 
+  Disconnection Reasons:
+  - CLIENT MANUAL DISCONNECTON: client disconnects manually -> server receives reason: "client namespace disconnect" -> client receives reason: "io client disconnect";
+
+  - CLIENT REFRESHES THE PAGE: server receives reason: "transport close" and that's it;
+
+  - SERVER STOPS RUNNING: client receives reason: "transport close" -> tries to reconnect infinitely;
+*/
+
+/* 
   BUGS:
 
-  - [development] several call of the clean-cookie http request;
-  - [development] deleting your own session or anyother session while their socket
+  1. [development] several call of the clean-cookie http request;
+  2. [development] deleting your own session or anyother session while their socket
   is not connected anymore make it blocked (if it is the current session) and 
   make other sessions refresh-token suspicious since they do not exist in the DB anymore
+  3. when socket does not work, we still must be able to login and logout;
 */
 
 /* 

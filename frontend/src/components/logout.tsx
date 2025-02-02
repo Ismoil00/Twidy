@@ -28,21 +28,21 @@ export default function Logout() {
       /* HTTP ERROR HANDLE */
       if (response.status !== 204) throw await response.json();
 
-      /* WE REMOVE SESSION SOCKET TOO */
-      let socketResponse;
-      if (sessionSocket !== undefined && sessionSocket.connected) {
-        const data: localStorageSession = JSON.parse(
-          localStorage.getItem("session") as string
-        );
-        socketResponse = await sessionSocket.emitWithAck("session:logout", {
-          userId: data["userId"],
-          sessionId: data["sessionId"],
-        });
-      }
-      /* SOCKET ERRORS HANDLER */
-      if (sessionSocket === undefined || sessionSocket.disconnected)
-        throw { message: "SOCKET is disconnected or undefined" };
-      else if (socketResponse.status !== 200) throw socketResponse;
+      // /* WE REMOVE SESSION SOCKET TOO */
+      // let socketResponse;
+      // if (sessionSocket !== undefined && sessionSocket.connected) {
+      //   const data: localStorageSession = JSON.parse(
+      //     localStorage.getItem("session") as string
+      //   );
+      //   socketResponse = await sessionSocket.emitWithAck("session:logout", {
+      //     userId: data["userId"],
+      //     sessionId: data["sessionId"],
+      //   });
+      // }
+      // /* SOCKET ERRORS HANDLER */
+      // if (sessionSocket === undefined || sessionSocket.disconnected)
+      //   throw { message: "SOCKET is disconnected or undefined" };
+      // else if (socketResponse.status !== 200) throw socketResponse;
 
       localStorage.removeItem("session");
       navigate("/login");

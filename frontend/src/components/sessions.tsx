@@ -32,11 +32,48 @@ interface SessionComponentProps {
   deleteSession: (session: UserSession) => Promise<void>;
 }
 
+const tempCurrentSession: UserSession = {
+  sessionId: "3aad005a-1a29-4dd1-a65c-1014422b424e",
+  userId: "32da80ad-f856-48fc-aaa0-97bd3613d880",
+  ip: "::1",
+  browser: "Chrome",
+  createdAt: "2025-02-02 14:27",
+  location: "Tajikistant",
+};
+const tempOtherSessions: UserSession[] = [
+  {
+    sessionId: "d8aaa132-5d26-4342-a8b0-0e538afabe7e",
+    userId: "32da80ad-f856-48fc-aaa0-97bd3613d880",
+    ip: "::ffff:127.0.0.1",
+    browser: "Firefox",
+    createdAt: "2025-02-02 14:16",
+    location: "Tajikistant",
+  },
+  {
+    sessionId: "2615fa96-2fee-4afc-afb4-eaed1dd0466a",
+    userId: "32da80ad-f856-48fc-aaa0-97bd3613d880",
+    ip: "::1",
+    browser: "Chrome",
+    createdAt: "2025-02-02 14:10",
+    location: "Tajikistant",
+  },
+  {
+    sessionId: "c7d6f351-34f0-4cbd-8973-2677a05cb4f4",
+    userId: "32da80ad-f856-48fc-aaa0-97bd3613d880",
+    ip: "::1",
+    browser: "Chrome",
+    createdAt: "2025-02-02 14:03",
+    location: "Tajikistant",
+  },
+];
+
 export default function Sessions(): JSX.Element {
   const [clicked, setClicked] = useState<string>("");
   const [userSessions, setUserSessions] = useState<UserSessions>({
-    currentSession: null,
-    otherSessions: null,
+    currentSession: tempCurrentSession,
+    otherSessions: tempOtherSessions,
+    // currentSession: null,
+    // otherSessions: null,
   });
   const { sessionSocket } = useContext(sessionContext);
   const currentSession: LocalStorageSession = JSON.parse(
@@ -45,6 +82,7 @@ export default function Sessions(): JSX.Element {
   const navigate = useNavigate();
 
   useEffect(() => {
+    return;
     const fetchUserSessions = () => {
       if (sessionSocket !== undefined && sessionSocket.connected) {
         sessionSocket.emit("session:userAllSessions", currentSession["userId"]);
@@ -107,6 +145,7 @@ export default function Sessions(): JSX.Element {
   }, [sessionSocket]);
 
   const deleteSession = async (session: UserSession) => {
+    return;
     if (!sessionSocket || sessionSocket.disconnected) {
       console.error(
         "SESSION SOCKET is disconnected or undefined (sessions component): ",
@@ -130,6 +169,9 @@ export default function Sessions(): JSX.Element {
 
   return (
     <div>
+      {/* <button onClick={() => sessionSocket.disconnect()}>
+        disconnect socket
+      </button> */}
       {/* CURRENT SESSION */}
       {userSessions.currentSession ? (
         <>
