@@ -1,12 +1,12 @@
 import Logout from "../../components/logout";
 import Sessions from "../../components/sessions";
 
-export default function HomePage() {
+export default function Homepage() {
   return (
     <div className="bg-brand_gray">
       <Logout />
-      HomePage
-      <Sessions />
+      Homepage
+      {/* <Sessions /> */}
     </div>
   );
 }

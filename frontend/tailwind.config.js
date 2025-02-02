@@ -43,10 +43,30 @@ module.exports = {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-100px)" },
         },
+        closeSidebar: {
+          "0%": { left: "0" },
+          "100%": { left: "-100%" },
+        },
+        openSidebar: {
+          "0%": { left: "-100%" },
+          "100%": { left: "0" },
+        },
+        closeSidebarIcon: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-75%)" },
+        },
+        openSidebarIcon: {
+          "0%": { transform: "translateX(-75%)" },
+          "100%": { transform: "translateX(0)" },
+        },
       },
       animation: {
         moveLeft_01: "moveLeftKeyPoints_01 0.3s ease-out forwards",
         moveLeft_02: "moveLeftKeyPoints_02 0.3s ease-out forwards",
+        closeSidebarAnimation: "closeSidebar 0.3s ease-out forwards",
+        openSidebarAnimation: "openSidebar 0.3s ease-out forwards",
+        closeSidebarIconAnimation: "closeSidebarIcon 0.3s ease-out forwards",
+        openSidebarIconAnimation: "openSidebarIcon 0.3s ease-out forwards",
       },
     },
   },
