@@ -1,12 +1,13 @@
-import Logout from "../../components/logout";
-import Sessions from "../../components/sessions";
+import Header from "./header";
+import Categories from "./categories";
+import Recommendations from "./recommendations";
 
 export default function Homepage() {
   return (
     <div className="bg-brand_gray">
-      <Logout />
-      Homepage
-      {/* <Sessions /> */}
+      <Header />
+      <Categories />
+      <Recommendations />
     </div>
   );
 }

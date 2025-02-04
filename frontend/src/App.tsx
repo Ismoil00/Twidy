@@ -11,7 +11,7 @@ import Settings from "./pages/settings";
 
 function App() {
   return (
-    <div className="App bg-brand_gray">
+    <div>
       <SessionContextProvider>
         <Routes>
           <Route path="/login" element={<Login />} />

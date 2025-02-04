@@ -1,36 +1,9 @@
 import { useState, useEffect, useContext } from "react";
-import { FaTrashAlt } from "react-icons/fa";
-import { sessionContext } from "../helpers/sessionContext";
-import Notify from "./toast";
+import { sessionContext } from "../../helpers/sessionContext";
+import Notify from "../../components/toast";
 import { useNavigate } from "react-router-dom";
-
-interface LocalStorageSession {
-  userId: string;
-  sessionId: string;
-  token: string;
-  fullName: string;
-}
-
-interface UserSession {
-  sessionId: string;
-  userId: string;
-  ip: string;
-  location: string;
-  browser: string;
-  createdAt: string;
-}
-
-interface UserSessions {
-  currentSession: UserSession | null;
-  otherSessions: UserSession[] | null;
-}
-
-interface SessionComponentProps {
-  session: UserSession;
-  clicked: string;
-  setClicked: React.Dispatch<React.SetStateAction<string>>;
-  deleteSession: (session: UserSession) => Promise<void>;
-}
+import { UserSession, LocalStorageSession, UserSessions } from "./types";
+import Session from "./session";
 
 const tempCurrentSession: UserSession = {
   sessionId: "3aad005a-1a29-4dd1-a65c-1014422b424e",
@@ -223,53 +196,3 @@ export default function Sessions(): JSX.Element {
     </div>
   );
 }
-
-const Session = ({
-  session,
-  clicked,
-  setClicked,
-  deleteSession,
-}: SessionComponentProps) => {
-  return (
-    <section
-      onClick={() =>
-        setClicked((p: string) =>
-          p !== session.sessionId ? session.sessionId : ""
-        )
-      }
-      className="bg-brand_white mt-5 px-4 py-2 rounded-2xl flex flex-col sm:flex-row items-center justify-center sm:justify-between cursor-pointer hover:shadow-md transition-shadow hover:duration-300 active:shadow-lg active:duration-100 relative"
-    >
-      <div className="flex flex-col sm:flex-row sm:gap-10 items-center text-brand_text_primary">
-        <img
-          src={`assets/${session.browser || "browser"}.svg`}
-          alt="user session device"
-          className="w-15 h-15"
-        />
-        <p>{session.browser || "unknown device"}</p>
-        <p>{session.ip}</p>
-      </div>
-      <div className="text-brand_text_secondary">
-        <p
-          className={`${
-            clicked === session.sessionId ? "sm:animate-moveLeft_02" : ""
-          }`}
-        >
-          {session.createdAt}
-        </p>
-        {clicked === session.sessionId && (
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              deleteSession(session);
-            }}
-            className={`h-full w-20 bg-brand_red absolute right-0 top-0 rounded-r-2xl grid place-content-center text-brand_white ${
-              clicked === session.sessionId ? "animate-moveLeft_01" : ""
-            }`}
-          >
-            <FaTrashAlt style={{ scale: "2" }} />
-          </div>
-        )}
-      </div>
-    </section>
-  );
-};
