@@ -1,11 +1,4 @@
-import React from "react";
-
-interface ButtonTypes {
-  text: string;
-  onClick: () => void;
-  type?: "button" | "submit" | "reset" | undefined;
-  style?: React.CSSProperties;
-}
+import { ButtonTypes } from "./types";
 
 export default function Button({
   text,

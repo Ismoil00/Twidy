@@ -5,13 +5,6 @@ export interface SessionComponentProps {
   deleteSession: (session: UserSession) => Promise<void>;
 }
 
-export interface LocalStorageSession {
-  userId: string;
-  sessionId: string;
-  token: string;
-  fullName: string;
-}
-
 export interface UserSession {
   sessionId: string;
   userId: string;

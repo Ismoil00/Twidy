@@ -3,13 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Notify from "./toast";
 import { useContext } from "react";
 import { sessionContext } from "../helpers/sessionContext";
-
-interface localStorageSession {
-  userId: string;
-  sessionId: string;
-  token: string;
-  fullName: string;
-}
+import { LocalStorageSession } from "../globalTypes";
 
 export default function Logout() {
   const navigate = useNavigate();
@@ -31,7 +25,7 @@ export default function Logout() {
       // /* WE REMOVE SESSION SOCKET TOO */
       // let socketResponse;
       // if (sessionSocket !== undefined && sessionSocket.connected) {
-      //   const data: localStorageSession = JSON.parse(
+      //   const data: LocalStorageSession = JSON.parse(
       //     localStorage.getItem("session") as string
       //   );
       //   socketResponse = await sessionSocket.emitWithAck("session:logout", {
