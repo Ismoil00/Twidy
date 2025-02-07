@@ -33,6 +33,7 @@ module.exports = {
       },
       boxShadow: {
         error_red: "0 0px 10px rgba(255, 0, 0, 0.5)",
+        "custom-sm": "0 0px 5px rgba(0, 0, 0, 0.25)",
       },
       keyframes: {
         moveLeftKeyPoints_01: {

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { IoMenu } from "react-icons/io5";
 import { FaChevronLeft } from "react-icons/fa";
 import SidebarListItems from "./sidebarItem";
+import Logout from "../logout";
 
 export default function Sidebar() {
   const [open, setOpen] = useState<boolean>(true);
@@ -10,7 +11,7 @@ export default function Sidebar() {
     <>
       {/* LAPTOP + PC VERSIONS */}
       <div className="hidden sm:block w-44 bg-brand_gray">
-        <SidebarListItems />
+        <SidebarListItems version="desktop" />
       </div>
 
       {/* MOBILE VERSION */}
@@ -34,13 +35,27 @@ export default function Sidebar() {
           } absolute top-2 right-2 z-10 size-6 text-brand_text_secondary cursor-pointer`}
         />
         <div
-          className={`bg-brand_gray shadow-xl pb-10 absolute w-full h-full ${
+          className={`flex flex-col pt-10 gap-10 px-3 bg-brand_gray shadow-xl absolute w-full h-full ${
             open
               ? "animate-openSidebarAnimation"
               : "animate-closeSidebarAnimation"
           }`}
         >
-          <SidebarListItems />
+          <div className="flex flex-col lg:flex-row items-center gap-2 cursor-pointer group/profile relative">
+            <span className="w-[15px] h-[15px] bg-brand_green rounded-full absolute left-0 translate-x-[260%] ring-4 ring-brand_gray"></span>
+            <img
+              src="assets/person-02.png"
+              alt="User Profile Image"
+              className="w-[60px] h-[70px] rounded-16px object-cover object-center group-hover/profile:shadow-custom-sm transition duration-200"
+            />
+            <h2 className="font-700 text-brand_text_primary group-hover/profile:text-brand_text_primary/60 transition duration-200 text-center">
+              {"Екатерина Варнава"}
+            </h2>
+          </div>
+          <SidebarListItems version="mobile" />
+          <div className="flex-1 flex flex-col justify-end pb-10">
+            <Logout />
+          </div>
         </div>
       </div>
     </>

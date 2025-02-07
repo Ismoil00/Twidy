@@ -50,8 +50,11 @@ export default function Logout() {
   };
 
   return (
-    <div>
-      <Button text="logout" onClick={handleLogout} />
+    <div
+      onClick={handleLogout}
+      className="text-center font-700 text-brand_text_primary cursor-pointer hover:text-brand_text_primary/60 duration-200 transition"
+    >
+      logout
     </div>
   );
 }
