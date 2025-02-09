@@ -8,6 +8,7 @@ import Layout from "./pages/layout";
 import Homepage from "./pages/home";
 import Messages from "./pages/messages";
 import Settings from "./pages/settings";
+import Profile from "./pages/profile";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
                     <Route path="home" element={<Homepage />} />
                     <Route path="messages" element={<Messages />} />
                     <Route path="settings" element={<Settings />} />
+                    <Route path="profile/:username" element={<Profile />} />
                   </Route>
                   <Route path="*" element={<div>Page not found</div>} />
                 </Routes>

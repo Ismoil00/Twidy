@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext } from "react";
-import { sessionContext } from "../../helpers/sessionContext";
-import Notify from "../../components/toast";
+import { sessionContext } from "../../../helpers/sessionContext";
+import Notify from "../../../components/toast";
 import { useNavigate } from "react-router-dom";
-import { UserSession, UserSessions } from "./types";
-import { LocalStorageSession } from "../../globalTypes";
+import { UserSession, UserSessions } from "../types";
+import { LocalStorageSession } from "../../../globalTypes";
 import Session from "./session";
 
 const tempCurrentSession: UserSession = {

@@ -1,4 +1,4 @@
-import { SessionComponentProps } from "./types";
+import { SessionComponentProps } from "../types";
 import { FaTrashAlt } from "react-icons/fa";
 
 export default function Session({
