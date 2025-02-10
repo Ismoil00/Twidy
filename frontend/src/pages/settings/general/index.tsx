@@ -8,9 +8,9 @@ export default function General() {
     <div>
       <Profile />
       <section>
-        <SocialMedias />
-        <Formalization />
-        <Security />
+        {/* <SocialMedias /> */}
+        {/* <Formalization /> */}
+        {/* <Security /> */}
       </section>
     </div>
   );

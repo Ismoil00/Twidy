@@ -7,6 +7,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/system";
+// import Profile from "./general/profile";
 
 const CustomTab = styled(Tab)(() => ({
   width: "auto",
@@ -58,6 +59,7 @@ export default function Settings() {
         </Tabs>
         <Box>{tabs[activeTab].component}</Box>
       </Box>
+      {/* <Profile /> */}
     </div>
   );
 }
