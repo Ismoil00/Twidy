@@ -18,3 +18,9 @@ export interface UserSessions {
   currentSession: UserSession | null;
   otherSessions: UserSession[] | null;
 }
+
+export interface SocialMediaProps {
+  icon: string;
+  name: string;
+  onClick: () => void;
+}

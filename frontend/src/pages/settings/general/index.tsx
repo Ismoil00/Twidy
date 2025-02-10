@@ -1,16 +1,14 @@
 import Profile from "./profile";
 import SocialMedias from "./socialMedias";
-import Formalization from "./formalization";
 import Security from "./security";
 
 export default function General() {
   return (
-    <div>
+    <div className="min-h-screen flex gap-10 flex-wrap">
       <Profile />
-      <section>
-        {/* <SocialMedias /> */}
-        {/* <Formalization /> */}
-        {/* <Security /> */}
+      <section className="flex-1">
+        <SocialMedias />
+        <Security />
       </section>
     </div>
   );

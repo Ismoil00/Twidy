@@ -19,7 +19,7 @@ const tempOtherSessions: UserSession[] = [
     sessionId: "d8aaa132-5d26-4342-a8b0-0e538afabe7e",
     userId: "32da80ad-f856-48fc-aaa0-97bd3613d880",
     ip: "::ffff:127.0.0.1",
-    browser: "Firefox",
+    browser: "Chrome",
     createdAt: "2025-02-02 14:16",
     location: "Tajikistant",
   },
@@ -141,6 +141,8 @@ export default function Sessions(): JSX.Element {
     }
   };
 
+  const endAllOtherSessions = async () => {};
+
   return (
     <div>
       {/* <button onClick={() => sessionSocket.disconnect()}>
@@ -149,10 +151,7 @@ export default function Sessions(): JSX.Element {
       {/* CURRENT SESSION */}
       {userSessions.currentSession ? (
         <>
-          <h2
-            className="text-brand_text_primary text-xl
-          text-center font-bold -mb-3"
-          >
+          <h2 className="text-brand_text_primary text-xl ml-5 font-bold -mb-3">
             Current Session
           </h2>
           <Session
@@ -175,7 +174,7 @@ export default function Sessions(): JSX.Element {
         <>
           <h2
             className="text-brand_text_primary text-xl
-          text-center mt-6 -mb-3"
+          ml-5 mt-6 -mb-3"
           >
             Other Sessions
           </h2>
@@ -188,6 +187,12 @@ export default function Sessions(): JSX.Element {
               deleteSession={deleteSession}
             />
           ))}
+          <button
+            onClick={endAllOtherSessions}
+            className="text-brand_red font-700 text-center mt-5 text-[20px] hover:text-brand_red/70 transition duration-200 active:text-brand_red/50"
+          >
+            Delete All Other Sessions
+          </button>
         </>
       ) : (
         <p className="text-brand_text_primary text-xl text-center">
