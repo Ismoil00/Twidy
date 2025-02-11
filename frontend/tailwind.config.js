@@ -7,6 +7,7 @@ module.exports = {
         brand_white: "#FFFFFF",
         brand_gray: "#F2F2FE",
         brand_blue: "#615DFA",
+        brand_light_blue: "#58AAFF",
         brand_orange: "#FFA012",
         brand_green: "#57BB34",
         brand_red: "#FF3B30",

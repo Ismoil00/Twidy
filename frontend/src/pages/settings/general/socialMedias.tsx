@@ -1,6 +1,14 @@
 import { useState } from "react";
 import Button from "../../../components/button";
 import SocialMedia from "./socialMedia";
+import Modal from "../../../components/modal";
+import Input from "../../../components/input";
+import { NewWebsiteProps } from "../types";
+
+const initState: NewWebsiteProps = {
+  name: "",
+  url: "",
+};
 
 export default function SocialMedias() {
   const [socialMedias, setSocialMedias] = useState<any>([
@@ -20,8 +28,20 @@ export default function SocialMedias() {
       platform: "instagram",
     },
   ]);
+  const [newWebsite, setNewWebsite] = useState<NewWebsiteProps>(initState);
 
-  const handleAddNewWebsite = async () => {};
+  const handleInputChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = event.target;
+    setNewWebsite((p: NewWebsiteProps) => ({ ...p, [name]: value }));
+  };
+
+  const handleModalClose = () => setNewWebsite(initState);
+
+  const handleAddNewWebsite = async () => {
+    setNewWebsite(initState);
+  };
 
   return (
     <div>
@@ -38,7 +58,37 @@ export default function SocialMedias() {
           />
         ))}
         <div className="w-[300px] h-fit p-5 flex gap-5 items-center rounded-20px bg-brand_white">
-          <Button onClick={handleAddNewWebsite} text="New Website" />
+          <Modal
+            call={<Button onClick={() => {}} text="New Website" />}
+            cancelText="Cancel"
+            saveText="Save Website"
+            onSave={handleAddNewWebsite}
+            onCancel={handleModalClose}
+            title="Add New Website"
+            content={
+              <>
+                <Input
+                  name="name"
+                  onChange={handleInputChange}
+                  placeholder="website name"
+                  type="text"
+                  value={newWebsite.name}
+                  label="Name"
+                  inputTailwindUtilities="mb-5"
+                  labelTailwindUtilities="ml-4"
+                />
+                <Input
+                  name="url"
+                  onChange={handleInputChange}
+                  placeholder="website address"
+                  type="url"
+                  value={newWebsite.url}
+                  label="URL"
+                  labelTailwindUtilities="ml-4"
+                />
+              </>
+            }
+          />
         </div>
       </section>
     </div>

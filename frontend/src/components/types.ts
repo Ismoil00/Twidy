@@ -1,4 +1,4 @@
-import { MouseEventHandler } from "react";
+import { ReactNode } from "react";
 
 export interface ButtonTypes {
   text: string;
@@ -44,4 +44,14 @@ export interface DropdownType {
   error?: boolean;
   dropdownTailwindUtilities?: string | undefined;
   labelTailwindUtilities?: string | undefined;
+}
+
+export interface ModalProps {
+  call: ReactNode;
+  cancelText: string;
+  saveText: string;
+  onSave: () => Promise<void>;
+  title: string;
+  content: ReactNode;
+  onCancel?: () => Promise<void> | void;
 }

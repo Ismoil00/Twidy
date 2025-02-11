@@ -24,3 +24,16 @@ export interface SocialMediaProps {
   name: string;
   onClick: () => void;
 }
+
+export interface NewWebsiteProps {
+  name: string;
+  url: string;
+}
+
+export interface ContactCardProps {
+  bgColor: string;
+  icon: string;
+  contactName: string;
+  price: number;
+  onChangeContact: () => Promise<void> | void;
+}

@@ -1,16 +1,19 @@
 import { useState } from "react";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { ModalProps } from "./types";
 
-interface ModalProps {
-  children: React.ReactNode;
-}
-
-export default function Modal({ children }: ModalProps) {
+export default function Modal({
+  call,
+  cancelText,
+  saveText,
+  onSave,
+  title,
+  content,
+  onCancel,
+}: ModalProps) {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -23,24 +26,37 @@ export default function Modal({ children }: ModalProps) {
 
   return (
     <>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open alert dialog
-      </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">"title"</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Content
-          </DialogContentText>
-        </DialogContent>
+      <div className="w-full" onClick={handleClickOpen}>
+        {call}
+      </div>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>
+          <div className="text-brand_text_primary ml-4 border-b border-b-brand_gray pb-1 text-lg sm:text-xl">
+            {title}
+          </div>
+        </DialogTitle>
+        <DialogContent>{content}</DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose}>Agree</Button>
+          <div className="w-full flex justify-center gap-5">
+            <button
+              onClick={() => {
+                handleClose();
+                onCancel && onCancel();
+              }}
+              className="text-brand_text_primary font-700 capitalize hover:text-brand_text_primary/70 transition duration-200 tracking-tight sm:text-[18px]"
+            >
+              {cancelText}
+            </button>
+            <button
+              onClick={() => {
+                handleClose();
+                onSave();
+              }}
+              className="text-brand_text_primary font-700 capitalize hover:text-brand_text_primary/70 transition duration-200 tracking-tight sm:text-[18px]"
+            >
+              {saveText}
+            </button>
+          </div>
         </DialogActions>
       </Dialog>
     </>
