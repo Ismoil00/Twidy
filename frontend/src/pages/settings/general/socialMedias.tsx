@@ -65,6 +65,7 @@ export default function SocialMedias() {
             onSave={handleAddNewWebsite}
             onCancel={handleModalClose}
             title="Add New Website"
+            callTailwind="w-full"
             content={
               <>
                 <Input

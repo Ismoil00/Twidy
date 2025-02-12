@@ -24,7 +24,7 @@ export default function Input({
       <input
         type={type}
         name={name}
-        value={value}
+        value={value === 0 ? "" : value}
         onChange={onChange}
         placeholder={placeholder}
         className={`input w-full px-5 py-3 mt-1 rounded-20px bg-brand_gray text-brand_text_secondary tracking-wide focus:outline-none transition duration-100 focus:ring-1 placeholder-brand_text_secondary/30 ${

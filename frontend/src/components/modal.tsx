@@ -13,6 +13,7 @@ export default function Modal({
   title,
   content,
   onCancel,
+  callTailwind
 }: ModalProps) {
   const [open, setOpen] = useState(false);
 
@@ -26,9 +27,9 @@ export default function Modal({
 
   return (
     <>
-      <div className="w-full" onClick={handleClickOpen}>
+      <span className={callTailwind} onClick={handleClickOpen}>
         {call}
-      </div>
+      </span>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
           <div className="text-brand_text_primary ml-4 border-b border-b-brand_gray pb-1 text-lg sm:text-xl">

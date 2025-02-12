@@ -40,8 +40,11 @@ export interface ContactProps {
 }
 
 export interface ContactCardProps extends ContactProps {
-  onChangeContact: () => Promise<void> | void;
-  handleContactPriceChange: (e: React.ChangeEvent<HTMLInputElement>, contactName: bgColor) => void
+  onContactChangeSave: () => Promise<void> | void;
+  handleContactPriceChange: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    contactName: bgColor
+  ) => void;
 }
 
 export interface ServiceProps {
@@ -53,6 +56,9 @@ export interface ServiceProps {
 }
 
 export interface ServiceCardProps extends ServiceProps {
-  // onChangeContact: () => Promise<void> | void;
-  // handleContactPriceChange: (e: React.ChangeEvent<HTMLInputElement>, contactName: bgColor) => void
+  handleServiceChange: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: string | number
+  ) => void;
+  handleServiceChangeSave: () => Promise<void>;
 }

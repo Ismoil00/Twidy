@@ -3,7 +3,7 @@ import Button from "../../../components/button";
 
 export default function Security() {
   return (
-    <div className="max-w-[700px] pb-10">
+    <div className="max-w-[700px]">
       <h1 className="text-brand_text_primary text-center sm:text-left font-700 text-3xl sm:text-4xl mt-10 mb-5 ml-5">
         Security
       </h1>

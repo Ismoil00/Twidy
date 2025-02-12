@@ -54,4 +54,16 @@ export interface ModalProps {
   title: string;
   content: ReactNode;
   onCancel?: () => Promise<void> | void;
+  callTailwind?: string;
+}
+
+export interface CustomSwitchProps {
+  name: string;
+  checked: boolean;
+  onChange?:
+    | ((event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void)
+    | undefined;
+  tailwind?: string;
+  label?: string;
+  labelTailwind?: string;
 }

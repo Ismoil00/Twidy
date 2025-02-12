@@ -6,14 +6,14 @@ export default function ContactCard({
   icon,
   contactName,
   price,
-  onChangeContact,
+  onContactChangeSave,
   handleContactPriceChange,
 }: ContactCardProps) {
   const [changeMode, setChangeMode] = useState<boolean>(false);
 
   return (
     <div
-      className={`${bgColor} w-full sm:w-[270px] h-[350px] rounded-20px flex flex-col p-10 justify-between cursor-pointer`}
+      className={`${bgColor} w-full sm:w-[270px] h-[350px] rounded-20px flex flex-col p-10 justify-between`}
     >
       <section>
         <img src={`assets/${icon}.png`} alt={icon + " card icon"} />
@@ -34,10 +34,10 @@ export default function ContactCard({
           <h1 className="text-brand_white font-700 text-4xl">{price}$</h1>
         )}
         <button
-          className="text-brand_white font-700 text-xl mt-1"
+          className="text-brand_white hover:text-brand_white/50 transition duration-200 font-700 text-xl mt-1"
           onClick={() => {
             setChangeMode((p: boolean) => !p);
-            onChangeContact();
+            onContactChangeSave();
           }}
         >
           {changeMode ? "Save" : "Change"}
