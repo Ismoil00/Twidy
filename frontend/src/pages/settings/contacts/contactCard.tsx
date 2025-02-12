@@ -7,7 +7,7 @@ export default function ContactCard({
   contactName,
   price,
   onChangeContact,
-  handlePriceChange,
+  handleContactPriceChange,
 }: ContactCardProps) {
   const [changeMode, setChangeMode] = useState<boolean>(false);
 
@@ -27,7 +27,7 @@ export default function ContactCard({
             type="text"
             name="price"
             value={price === 0 ? "" : price}
-            onChange={(e) => handlePriceChange(e, contactName)}
+            onChange={(e) => handleContactPriceChange(e, contactName)}
             className="bg-transparent/10 w-[185px] outline-none px-2 py-1 appearance-none text-brand_white font-700 rounded-md text-xl"
           />
         ) : (
