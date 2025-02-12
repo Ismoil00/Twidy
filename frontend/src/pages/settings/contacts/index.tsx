@@ -1,28 +1,46 @@
+import { useState } from "react";
 import ContactCard from "./contactCard";
-
-const contacts = [
-  {
-    bgColor: "bg-brand_blue",
-    icon: "chat",
-    contactName: "Message Cost",
-    price: 2,
-  },
-  {
-    bgColor: "bg-brand_orange",
-    icon: "call",
-    contactName: "Call Cost",
-    price: 241,
-  },
-  {
-    bgColor: "bg-brand_light_blue",
-    icon: "video-call",
-    contactName: "Video Call Cost",
-    price: 352,
-  },
-];
+import { ContactProps, bgColor } from "../types";
 
 export default function Contacts() {
+  const [contacts, setContacts] = useState<ContactProps[]>([
+    {
+      bgColor: "bg-brand_blue",
+      icon: "chat",
+      contactName: "Message Cost",
+      price: 2,
+    },
+    {
+      bgColor: "bg-brand_orange",
+      icon: "call",
+      contactName: "Call Cost",
+      price: 241,
+    },
+    {
+      bgColor: "bg-brand_light_blue",
+      icon: "video-call",
+      contactName: "Video Call Cost",
+      price: 352,
+    },
+  ]);
+
   const handleContactChange = () => {};
+
+  const handlePriceChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    contactName: bgColor
+  ) => {
+    const { name, value } = e.target;
+    if (isNaN(Number(value))) return;
+
+    const newContacts = contacts.map((el: ContactProps) =>
+      el.contactName === contactName
+        ? { ...el, [name]: Number(value) }
+        : { ...el }
+    );
+
+    setContacts(newContacts);
+  };
 
   return (
     <div className="min-h-screen">
@@ -35,6 +53,7 @@ export default function Contacts() {
             key={contact.contactName}
             {...contact}
             onChangeContact={handleContactChange}
+            handlePriceChange={handlePriceChange}
           />
         ))}
       </section>

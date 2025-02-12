@@ -20,7 +20,7 @@ function App() {
           <Route
             path="/*"
             element={
-              <ProtectedRoutes>
+              // <ProtectedRoutes>
                 <Routes>
                   <Route path="/" element={<Layout />}>
                     <Route index element={<Homepage />} />
@@ -31,7 +31,7 @@ function App() {
                   </Route>
                   <Route path="*" element={<div>Page not found</div>} />
                 </Routes>
-              </ProtectedRoutes>
+              // </ProtectedRoutes>
             }
           />
         </Routes>

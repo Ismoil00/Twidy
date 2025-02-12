@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ContactCardProps } from "../types";
 
 export default function ContactCard({
@@ -6,10 +7,13 @@ export default function ContactCard({
   contactName,
   price,
   onChangeContact,
+  handlePriceChange,
 }: ContactCardProps) {
+  const [changeMode, setChangeMode] = useState<boolean>(false);
+
   return (
     <div
-      className={`${bgColor} w-[270px] h-[350px] rounded-20px flex flex-col p-10 justify-between cursor-pointer`}
+      className={`${bgColor} w-full sm:w-[270px] h-[350px] rounded-20px flex flex-col p-10 justify-between cursor-pointer`}
     >
       <section>
         <img src={`assets/${icon}.png`} alt={icon + " card icon"} />
@@ -18,12 +22,25 @@ export default function ContactCard({
         </p>
       </section>
       <section>
-        <h1 className="text-brand_white font-700 text-4xl">{price}$</h1>
+        {changeMode ? (
+          <input
+            type="text"
+            name="price"
+            value={price === 0 ? "" : price}
+            onChange={(e) => handlePriceChange(e, contactName)}
+            className="bg-transparent/10 w-[185px] outline-none px-2 py-1 appearance-none text-brand_white font-700 rounded-md text-xl"
+          />
+        ) : (
+          <h1 className="text-brand_white font-700 text-4xl">{price}$</h1>
+        )}
         <button
           className="text-brand_white font-700 text-xl mt-1"
-          onClick={onChangeContact}
+          onClick={() => {
+            setChangeMode((p: boolean) => !p);
+            onChangeContact();
+          }}
         >
-          Change
+          {changeMode ? "Save" : "Change"}
         </button>
       </section>
     </div>

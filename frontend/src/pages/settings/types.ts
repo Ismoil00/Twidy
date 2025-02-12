@@ -30,10 +30,16 @@ export interface NewWebsiteProps {
   url: string;
 }
 
-export interface ContactCardProps {
-  bgColor: string;
-  icon: string;
-  contactName: string;
+export type bgColor = "Message Cost" | "Call Cost" | "Video Call Cost";
+
+export interface ContactProps {
+  bgColor: "bg-brand_blue" | "bg-brand_orange" | "bg-brand_light_blue";
+  icon: "chat" | "call" | "video-call";
+  contactName: "Message Cost" | "Call Cost" | "Video Call Cost";
   price: number;
+}
+
+export interface ContactCardProps extends ContactProps {
   onChangeContact: () => Promise<void> | void;
+  handlePriceChange: (e: React.ChangeEvent<HTMLInputElement>, contactName: bgColor) => void
 }
