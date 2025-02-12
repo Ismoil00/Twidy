@@ -62,3 +62,14 @@ export interface ServiceCardProps extends ServiceProps {
   ) => void;
   handleServiceChangeSave: () => Promise<void>;
 }
+
+export interface PaymentHistoryProps {
+  id: string | number;
+  image: string;
+  fullname: string;
+  time: string;
+  amount: number;
+  incoming: boolean;
+}
+
+export interface PaymentHistoryCardProps extends PaymentHistoryProps {}
