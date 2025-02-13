@@ -73,3 +73,11 @@ export interface PaymentHistoryProps {
 }
 
 export interface PaymentHistoryCardProps extends PaymentHistoryProps {}
+
+export interface CurrentBalanceProps {
+  currentBalance: number;
+  totalIncomings: number;
+  totalOutgoings: number;
+}
+
+export interface CurrentBalanceCompProps extends CurrentBalanceProps {}
