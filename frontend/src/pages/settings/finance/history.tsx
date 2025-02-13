@@ -10,7 +10,7 @@ export default function History({
   return (
     <>
       {/* DESCKTOP + LAPTOP VERSION */}
-      <div className="w-full hidden sm:flex flex-row flex-wrap justify-between items-center p-4 rounded-20px bg-bg-brand_white cursor-pointer hover:shadow-xl transition duration-300 active:bg-brand_white/50">
+      <div className="w-full hidden sm:flex flex-row flex-wrap justify-between items-center p-4 rounded-20px bg-brand_white cursor-pointer hover:shadow-xl transition duration-300 active:bg-brand_white/50">
         <section className="flex items-center gap-5">
           <img
             src={`assets/${image}`}

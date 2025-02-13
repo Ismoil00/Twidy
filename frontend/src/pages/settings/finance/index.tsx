@@ -2,6 +2,7 @@ import History from "./history";
 import { PaymentHistoryProps } from "../types";
 import CurrentBalance from "./currentBalance";
 import { CurrentBalanceProps } from "../types";
+import BankCard from "../../../components/bankCard";
 
 const paymentHistories: PaymentHistoryProps[] = [
   {
@@ -52,6 +53,36 @@ const currantBalance: CurrentBalanceProps = {
   totalOutgoings: 4000,
 };
 
+const cards = [
+  {
+    id: 1,
+    number: 1111222233334444,
+    name: "Ahrorov Buzurgmehr",
+    type: "MasterCard",
+    expiry: "02/27",
+    cvc: "123",
+    default: true,
+  },
+  {
+    id: 2,
+    number: 3333555566669999,
+    name: "Ahrorov Buzurgmehr",
+    type: "Visa",
+    expiry: "05/28",
+    cvc: "236",
+    default: false,
+  },
+  {
+    id: 3,
+    number: 4444999977773333,
+    name: "Ahrorov Buzurgmehr",
+    type: "Korti Milli",
+    expiry: "11/29",
+    cvc: "968",
+    default: false,
+  },
+];
+
 export default function Finance() {
   return (
     <div className="min-h-screen pb-10">
@@ -60,6 +91,11 @@ export default function Finance() {
       </h1>
       <section>
         <CurrentBalance {...currantBalance} />
+        <div className="flex flex-col gap-5">
+          {cards.map((card) => (
+            <BankCard key={card.id} {...card} />
+          ))}
+        </div>
       </section>
 
       {/* HISTORY */}

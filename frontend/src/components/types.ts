@@ -67,3 +67,10 @@ export interface CustomSwitchProps {
   label?: string;
   labelTailwind?: string;
 }
+
+export interface BankCardProps {
+  number: string;
+  expiry: string;
+  cvc: string;
+  name: string;
+}
