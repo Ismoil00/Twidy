@@ -69,8 +69,16 @@ export interface CustomSwitchProps {
 }
 
 export interface BankCardProps {
-  number: string;
+  id: string | number;
+  type: string;
+  number: number;
   expiry: string;
   cvc: string;
   name: string;
+}
+
+export interface BankCardCompProps extends BankCardProps {
+  deleteBankCard: (id: string | number) => void;
+  open: string | number;
+  handleBankCardClick: (card: BankCardProps) => Promise<void>;
 }

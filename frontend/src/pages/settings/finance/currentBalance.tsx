@@ -7,7 +7,7 @@ export default function CurrentBalance({
   totalOutgoings,
 }: CurrentBalanceCompProps) {
   return (
-    <div className="w-[285px] flex flex-col gap-2">
+    <div className="w-[285px] flex flex-col items-center sm:items-start gap-2">
       <p className="text-brand_text_secondary capitalize ml-1 font-700">
         Current Balance
       </p>

@@ -2,7 +2,7 @@ import History from "./history";
 import { PaymentHistoryProps } from "../types";
 import CurrentBalance from "./currentBalance";
 import { CurrentBalanceProps } from "../types";
-import BankCard from "../../../components/bankCard";
+import Cards from "./cards";
 
 const paymentHistories: PaymentHistoryProps[] = [
   {
@@ -53,53 +53,19 @@ const currantBalance: CurrentBalanceProps = {
   totalOutgoings: 4000,
 };
 
-const cards = [
-  {
-    id: 1,
-    number: 1111222233334444,
-    name: "Ahrorov Buzurgmehr",
-    type: "MasterCard",
-    expiry: "02/27",
-    cvc: "123",
-    default: true,
-  },
-  {
-    id: 2,
-    number: 3333555566669999,
-    name: "Ahrorov Buzurgmehr",
-    type: "Visa",
-    expiry: "05/28",
-    cvc: "236",
-    default: false,
-  },
-  {
-    id: 3,
-    number: 4444999977773333,
-    name: "Ahrorov Buzurgmehr",
-    type: "Korti Milli",
-    expiry: "11/29",
-    cvc: "968",
-    default: false,
-  },
-];
-
 export default function Finance() {
   return (
     <div className="min-h-screen pb-10">
       <h1 className="text-brand_text_primary text-center sm:text-left font-700 text-3xl sm:text-4xl mt-10 mb-5 ml-5">
         Payments and Finances
       </h1>
-      <section>
+      <section className="max-w-[715px] flex flex-col sm:flex-row sm:justify-between items-center sm:items-start sm:flex-wrap gap-10">
         <CurrentBalance {...currantBalance} />
-        <div className="flex flex-col gap-5">
-          {cards.map((card) => (
-            <BankCard key={card.id} {...card} />
-          ))}
-        </div>
+        <Cards />
       </section>
 
       {/* HISTORY */}
-      <h1 className="text-brand_text_primary text-center sm:text-left font-700 text-3xl sm:text-4xl mt-10 mb-5 ml-5">
+      <h1 className="text-brand_text_primary text-center sm:text-left font-700 text-3xl sm:text-4xl mt-20 mb-5 ml-5">
         History
       </h1>
       <section className="max-w-[715px] flex flex-col gap-4 justify-center">
