@@ -1,6 +1,7 @@
 import { useState } from "react";
 import BankCard from "../../../components/bankCard";
 import { BankCardProps } from "../../../components/types";
+import NewCard from "./newCard";
 
 const cards = [
   {
@@ -31,6 +32,14 @@ const cards = [
 
 export default function Cards() {
   const [open, setOpen] = useState<string | number>(cards[0].id);
+  const [newCard, setNewCard] = useState<BankCardProps>({
+    id: "",
+    type: "",
+    number: 0,
+    expiry: "",
+    cvc: "",
+    name: "",
+  });
 
   const deleteBankCard = (id: string | number) => {
     console.log("id", id);
@@ -44,6 +53,8 @@ export default function Cards() {
     }
   };
 
+  const addNewBankCard = async () => {};
+
   return (
     <div className="flex flex-col gap-5">
       {cards.map((card) => (
@@ -55,6 +66,11 @@ export default function Cards() {
           handleBankCardClick={handleBankCardClick}
         />
       ))}
+      <NewCard
+        newCard={newCard}
+        setNewCard={setNewCard}
+        addNewBankCard={addNewBankCard}
+      />
     </div>
   );
 }
