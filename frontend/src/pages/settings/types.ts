@@ -81,3 +81,16 @@ export interface CurrentBalanceProps {
 }
 
 export interface CurrentBalanceCompProps extends CurrentBalanceProps {}
+
+export interface SubscriptionArticleProps {
+  id: string | number;
+  fullname: string;
+  price: number;
+  description: string;
+  profession: string[];
+  image: string;
+}
+
+export interface SubscriptionArticleCompProps {
+  sub: SubscriptionArticleProps;
+}
