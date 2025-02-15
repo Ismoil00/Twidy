@@ -80,5 +80,6 @@ export interface BankCardProps {
 export interface BankCardCompProps extends BankCardProps {
   deleteBankCard: (id: string | number) => void;
   open: string | number;
-  handleBankCardClick: (card: BankCardProps) => Promise<void>;
+  setOpen: React.Dispatch<React.SetStateAction<string | number>>
+  setNewCard: React.Dispatch<React.SetStateAction<BankCardProps>>;
 }

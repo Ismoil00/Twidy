@@ -1,5 +1,5 @@
 import { useState } from "react";
-import BankCard from "../../../components/bankCard";
+import BankCard from "./bankCard";
 import { BankCardProps } from "../../../components/types";
 import NewCard from "./newCard";
 
@@ -45,14 +45,6 @@ export default function Cards() {
     console.log("id", id);
   };
 
-  const handleBankCardClick = async (card: BankCardProps) => {
-    if (card.id !== open) {
-      setOpen(card.id);
-    } else {
-      alert("MODAL MUST BE OPENED");
-    }
-  };
-
   const addNewBankCard = async () => {};
 
   return (
@@ -63,7 +55,8 @@ export default function Cards() {
           {...card}
           open={open}
           deleteBankCard={deleteBankCard}
-          handleBankCardClick={handleBankCardClick}
+          setOpen={setOpen}
+          setNewCard={setNewCard}
         />
       ))}
       <NewCard
