@@ -32,7 +32,7 @@ export default function SearchBar({
         placeholder="Search by name and category"
         type="text"
         value={searchedText}
-        inputTailwindUtilities="bg-brand_white focus:ring-transparent focus:shadow-lg !text-brand_text_primary pl-[3rem] peer/searchBar"
+        inputTailwindUtilities="bg-brand_white focus:ring-transparent focus:shadow-lg !text-brand_text_primary pl-[3rem] pr-[2.2rem] peer/searchBar"
       />
       <IoClose
         onClick={(e) => setSearchedText("")}

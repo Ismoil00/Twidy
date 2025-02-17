@@ -80,6 +80,11 @@ export interface BankCardProps {
 export interface BankCardCompProps extends BankCardProps {
   deleteBankCard: (id: string | number) => void;
   open: string | number;
-  setOpen: React.Dispatch<React.SetStateAction<string | number>>
+  setOpen: React.Dispatch<React.SetStateAction<string | number>>;
   setNewCard: React.Dispatch<React.SetStateAction<BankCardProps>>;
+}
+
+export interface DropDownMenuCompProps {
+  button: ReactNode;
+  elements: string[];
 }
