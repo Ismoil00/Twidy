@@ -3,41 +3,20 @@ import Input from "../../components/input";
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { IoIosSearch } from "react-icons/io";
+import SearchBar from "../../components/searchBar";
 
 /* HOMEPAGE HEADER */
 export default function Header() {
   const [searchedText, setSearchedText] = useState<string>("");
 
-  const handleSearch = () => {
-    console.log(searchedText);
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchedText(event.target.value);
-  };
+  console.log(searchedText);
 
   return (
     <div className="pt-10 px-[3vw] sm:pt-5 sm:pr-[2vw] sm:pl-0 flex md:gap-4 lg:gap-8 md:items-center">
-      <div className="searchBar relative flex-1">
-        <IoIosSearch
-          onClick={handleSearch}
-          className={`text-brand_text_secondary size-8 absolute top-0 left-0 translate-y-[35%] translate-x-2 cursor-pointer hover:text-brand_text_primary transition duration-200 active:scale-[1.05]`}
-        />
-        <Input
-          name="searchBar"
-          onChange={handleInputChange}
-          placeholder="Search by name and category"
-          type="text"
-          value={searchedText}
-          inputTailwindUtilities="bg-brand_white focus:ring-transparent focus:shadow-lg !text-brand_text_primary pl-[3rem] peer/searchBar"
-        />
-        <IoClose
-          onClick={(e) => setSearchedText("")}
-          className={`text-brand_text_secondary size-7 absolute top-0 right-0 translate-y-[45%] -translate-x-2 cursor-pointer hover:text-brand_text_primary transition duration-200 peer-focus/searchBar:block ${
-            searchedText !== "" ? "block" : "hidden"
-          }`}
-        />
-      </div>
+      <SearchBar
+        searchedText={searchedText}
+        setSearchedText={setSearchedText}
+      />
       <div className="hidden sm:w-[100px] md:w-auto sm:flex flex-col lg:flex-row items-end md:items-center gap-2 lg:gap-4 cursor-pointer group/profile relative">
         <span className="w-[15px] h-[15px] bg-brand_green rounded-full absolute left-0 translate-x-[220%] md:translate-x-[270%] lg:translate-x-[350%] ring-4 ring-brand_gray"></span>
         <img
